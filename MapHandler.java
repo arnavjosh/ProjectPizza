@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class MapHandler
 {
-    //TODO write levels class
+    //TODO: write levels class
     //TODO write up background objects
     private ArrayList<Level> levels;
     private int currentLevel;

@@ -3,7 +3,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.io.File;
 
 public class House {
     private int x, y, width = 300, height = 200;

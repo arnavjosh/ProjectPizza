@@ -10,23 +10,21 @@ public class Level
 
     private int newX, newY;
 
-    private static int W, L;
+    private static int roadWidth = RoadSegment.getWidth();
+    private static int  roadLength = RoadSegment.getLength();
 
     public Level()
     {
         roads = new ArrayList<>();
-        backgroundObjects = new ArrayList<>();
+        backgroundObjects = new ArrayList<>(); 
         houses = new ArrayList<>();
-        W = RoadSegment.getWidth();
-        L = RoadSegment.getLength();
-
         newX = GamePanel.dimX/2;
-        newY = GamePanel.dimY/2 + L/2;
+        newY = GamePanel.dimY/2 + roadLength/2;
     }
     public void addUp()
     {
         addRoad(new RoadSegment(newX,newY,0,RoadSegment.Type.STRAIGHT));
-        newY-=L;
+        newY-=roadLength;
     }
     
     public void addUp(int n)
@@ -39,7 +37,7 @@ public class Level
     public void addDown()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(180),RoadSegment.Type.STRAIGHT));
-        newY+=L;
+        newY+=roadLength;
     }
     public void addDown(int n)
     {
@@ -51,7 +49,7 @@ public class Level
     public void addLeft()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(-90),RoadSegment.Type.STRAIGHT));
-        newX-=L;
+        newX-=roadLength;
     }
     public void addLeft(int n)
     {
@@ -63,7 +61,7 @@ public class Level
     public void addRight()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(90),RoadSegment.Type.STRAIGHT));
-        newX+=L;
+        newX+=roadLength;
     }
     public void addRight(int n)
     {
@@ -75,50 +73,50 @@ public class Level
     public void addUpRight()
     {
         addRoad(new RoadSegment(newX,newY,0,RoadSegment.Type.CURVE_RIGHT));
-        newX +=W/2.0;
-        newY -=W/2.0;
+        newX +=roadWidth/2.0;
+        newY -=roadWidth/2.0;
     }
     public void addUpLeft()
     {
         addRoad(new RoadSegment(newX,newY,0,RoadSegment.Type.CURVE_LEFT));
-        newX -= W/2.0;
-        newY -= W/2.0;
+        newX -= roadWidth/2.0;
+        newY -= roadWidth/2.0;
     }
     public void addLeftDown()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(-90),RoadSegment.Type.CURVE_LEFT));
-        newY+=W/2.0;
-        newX-=W/2.0;
+        newY+=roadWidth/2.0;
+        newX-=roadWidth/2.0;
     }
     public void addRightDown()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(90),RoadSegment.Type.CURVE_RIGHT));
-        newY+=W/2.0;
-        newX+=W/2.0;
+        newY+=roadWidth/2.0;
+        newX+=roadWidth/2.0;
     }
     public void addDownRight()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(-180),RoadSegment.Type.CURVE_LEFT));
-        newY+=W/2.0;
-        newX+=W/2.0;
+        newY+=roadWidth/2.0;
+        newX+=roadWidth/2.0;
     }
     public void addDownLeft()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(-180),RoadSegment.Type.CURVE_RIGHT));
-        newY+=W/2.0;
-        newX-=W/2.0;
+        newY+=roadWidth/2.0;
+        newX-=roadWidth/2.0;
     }
     public void addRightUp()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(90),RoadSegment.Type.CURVE_LEFT));
-        newX+=W/2.0;
-        newY-=W/2.0;
+        newX+=roadWidth/2.0;
+        newY-=roadWidth/2.0;
     }
     public void addLeftUp()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(-90),RoadSegment.Type.CURVE_RIGHT));
-        newX-=W/2.0;
-        newY-=W/2.0;
+        newX-=roadWidth/2.0;
+        newY-=roadWidth/2.0;
     }
 
     public void addRoad(RoadSegment road)
