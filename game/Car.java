@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -14,11 +15,14 @@ public class Car {
   private int centerX;
   private int centerY;
 
+  private int carWidth = 40;
+  private int carLength = 80;
+
   private double headingRadians;
   private double speed;
   private double acceleration = 0.1;
   private double maxSpeed = 15.0;
-  private double friction = 0.99;
+  private double friction = 0.98;;
   private double steeringAngle = 0;
   private final double maxSteeringAngle = Math.toRadians(10);
   private double steeringSpeed = Math.toRadians(3);
@@ -54,10 +58,8 @@ public class Car {
 
   public void update(MapHandler mapHandler) {
 
-    //gets the corners of the car, slightly inside the bounds of the car
-    int carWidth = 40;
-    int carLength = 80;
-
+    /*
+    //gets all of the corners
     ArrayList<Point2D> cornersAndMidsections = new ArrayList<>();
     cornersAndMidsections.add(new Point2D.Double(x - carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians),y-carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians))); //top left
     cornersAndMidsections.add(new Point2D.Double(x + carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians),y+carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians))); //top right
@@ -84,6 +86,19 @@ public class Car {
         x -= speed * Math.sin(headingRadians);
         y += speed * Math.cos(headingRadians);
         speed = -1*(Math.signum(speed))*(Math.min(Math.abs(speed*0.2), 0.2));
+        steeringAngle = 0;
+      }
+    }
+    */
+
+    for(House house : mapHandler.getCurrentHouses())
+    {
+      if(getBounds().intersects(house.getCollisionBox()))
+      {
+        //reverses movement
+        x -= speed * Math.sin(headingRadians);
+        y += speed * Math.cos(headingRadians);
+        speed = -1*(Math.signum(speed))*(Math.max(Math.abs(speed*0.2), 0.5));
         steeringAngle = 0;
       }
     }
@@ -142,15 +157,24 @@ public class Car {
     );
   }
 
-  public Rectangle2D getBounds() {
-    int carWidth = 40;
-    int carLength = 80;
-    return new Rectangle2D.Double(
-      x - carWidth / 2.0,
-      y - carLength / 2.0,
-      carWidth,
-      carLength
-    );
+  public Path2D getBounds() {
+    //applies rotations to points based on headingRadians (insert starstruck emoji)
+    int topLeftX = (int) (x - carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians));
+    int topLeftY = (int) (y - carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians));
+    int topRightX = (int) (x + carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians));
+    int topRightY = (int) (y + carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians));
+    int bottomLeftX = (int) (x - carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
+    int bottomLeftY = (int) (y - carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
+    int bottomRightX = (int) (x + carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
+    int bottomRightY = (int) (y + carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
+
+    Path2D path = new Path2D.Double();
+    path.moveTo(topLeftX, topLeftY);
+    path.lineTo(topRightX, topRightY);
+    path.lineTo(bottomRightX, bottomRightY);
+    path.lineTo(bottomLeftX, bottomLeftY);
+    path.closePath();
+    return path;
   }
 
   //this method draws teh car at each frame and rotates the  
