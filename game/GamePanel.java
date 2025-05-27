@@ -7,7 +7,6 @@ import java.awt.geom.AffineTransform;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener {
     private Timer timer;
-    //TODO: add the maphandler class!
     private MapHandler mapHandler;
     private ProjectPizza game;
     private Compass compass;
@@ -16,27 +15,25 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     public static final int dimX = 800;
     public static final int dimY = 600;
 
-    public GamePanel(ProjectPizza game) {
-        //double buffering should help?
-        super(true);
-        this.game = game;
+    public static final int centerX = dimX / 2;
+    public static final int centerY = dimY / 2;
 
+    public GamePanel(ProjectPizza game) {
+        this.game = game;
         setPreferredSize(new Dimension(800, 600));
         setBackground(Color.BLACK);
-
         //stack overflow said setfocusable will make key inputs focus better? I think this will solve problems we have
         setFocusable(true);
-
         addKeyListener(this);
-
-        //add maphandler
         mapHandler = new MapHandler();
 
         //adds car which is in the middle of screen
-        car = new Car(dimX/2,dimY/2,this);
+        car = new Car(centerX, centerY, this);
         compass = new Compass();
 
         //allows us to do an event every 16 ms (again i found this out on stackoverflow and it seems to make it work a lot better)
+        //https://stackoverflow.com/questions/36387853/java-timer-swing-exactly-60-fps
+        //16 ms is 60 fps
         timer = new Timer(16, this);
         timer.start();
     }
@@ -55,17 +52,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         //casts a copy of the graphic to a graphic 2d which lets us transform it with the affine thingy
         Graphics2D pizza2d = (Graphics2D) pizzaGraphic.create();
 
-        //center is in the exact middle
-        int centerX = getWidth()/2;
-        int centerY = getHeight()/2;
-
         //moves origin from corner to the sigma center
-        pizza2d.translate(centerX, centerY);
 
+        pizza2d.translate(centerX, centerY);
         pizza2d.rotate(-car.getHeading());
         pizza2d.translate(-car.getX(),-car.getY());
 
-        //make the map dra
         mapHandler.draw(pizza2d);
 
         pizza2d.dispose();
