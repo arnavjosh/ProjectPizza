@@ -10,18 +10,21 @@ import java.util.ArrayList;
 public class Car {
   private double x;
   private double y;
+  
+  private int centerX;
+  private int centerY;
+
   private double headingRadians;
   private double speed;
   private double acceleration = 0.1;
-  private double maxSpeed = 5.0;
+  private double maxSpeed = 15.0;
   private double friction = 0.99;
   private double steeringAngle = 0;
   private final double maxSteeringAngle = Math.toRadians(10);
   private double steeringSpeed = Math.toRadians(3);
   private final double wheelBase = 20;
-    private BufferedImage carImage;
-  private int centerX;
-  private int centerY;
+
+  private BufferedImage carImage;
 
   private boolean accelerating;
   private boolean turningLeft;
@@ -33,11 +36,11 @@ public class Car {
 //for testing
   public String currentSegment;
   
-  public Car(double startX, double startY, GamePanel panel) {
+  public Car(int startX, int startY, GamePanel panel) {
     x = startX;
     y = startY;
-    centerX = (int) startX;
-    centerY = (int) startY;
+    centerX = startX;
+    centerY = startY;
     this.panel = panel;
     headingRadians = 0;
 
