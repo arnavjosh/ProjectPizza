@@ -42,7 +42,7 @@ public class Car {
     headingRadians = 0;
 
     try{
-        carImage = ImageIO.read(getClass().getResource("Car.png"));
+        carImage = ImageIO.read(getClass().getResource("/images/Car.png"));
     } catch (IOException e)
     {
         e.printStackTrace();

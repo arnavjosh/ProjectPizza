@@ -24,7 +24,7 @@ public class House {
             e.printStackTrace();
         }
         try{
-            houseImage = ImageIO.read(getClass().getResource("House.png"));
+            houseImage = ImageIO.read(getClass().getResource("/images/House.png"));
         } catch (IOException e)
         {
             e.printStackTrace();
