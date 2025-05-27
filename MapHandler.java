@@ -106,15 +106,11 @@ public class MapHandler
         return getSegmentAt(x,y)!=null;
     }
 
-    public boolean isColliding(double checkX, double checkY){
+    public boolean isColliding(Point2D point){
         Level level = levels.get(currentLevel);
         for(House house : level.getHouses())
         {
-            AffineTransform inverse = house.getInverseTransform();
-            Point2D normalVersion = new Point2D.Double(checkX, checkY);
-            Point2D localVersion = inverse.transform(new Point2D.Double(checkX, checkY), null);
-            System.out.println(checkX + ", " + checkY + " -> " + normalVersion.getX() + ", " + normalVersion.getY());
-            if(house.getCollisionBox().contains(normalVersion))
+            if(house.getCollisionBox().contains(point))
                 return true;
         }
         return false;

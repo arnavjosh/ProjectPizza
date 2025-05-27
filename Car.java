@@ -1,9 +1,11 @@
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.File;
+import java.util.ArrayList;
 
 public class Car {
   private double x;
@@ -48,6 +50,41 @@ public class Car {
   }
 
   public void update(MapHandler mapHandler) {
+
+    //gets the corners of the car, slightly inside the bounds of the car
+    int carWidth = 40;
+    int carLength = 80;
+
+    ArrayList<Point2D> cornersAndMidsections = new ArrayList<>();
+    cornersAndMidsections.add(new Point2D.Double(x - carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians),y-carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians))); //top left
+    cornersAndMidsections.add(new Point2D.Double(x + carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians),y+carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians))); //top right
+    cornersAndMidsections.add(new Point2D.Double(x - carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians),y-carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians))); //bottom left
+    cornersAndMidsections.add(new Point2D.Double(x + carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians),y+carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians))); //bottom right
+
+    int timesToSplit = 2;
+
+    for(int i = 0; i < timesToSplit; i++)
+    {
+      int sizeBefore = cornersAndMidsections.size();
+      for(int j = 0; j < sizeBefore; j++)
+      {
+        Point2D p1 = cornersAndMidsections.get(j);
+        Point2D p2 = cornersAndMidsections.get((j+1)%cornersAndMidsections.size());
+        cornersAndMidsections.add((j+1)%cornersAndMidsections.size(),getMidpoint(p1, p2));
+      }
+    }
+
+
+    for (Point2D point : cornersAndMidsections) {
+      if (mapHandler.isColliding(point)) {
+        //reverses movement
+        x -= speed * Math.sin(headingRadians);
+        y += speed * Math.cos(headingRadians);
+        speed = -1*(Math.signum(speed))*(Math.min(Math.abs(speed*0.2), 0.2));
+        steeringAngle = 0;
+      }
+    }
+
     if (turningLeft) {
       steeringAngle = Math.max(steeringAngle - steeringSpeed, -maxSteeringAngle);
     } else if (turningRight) {
@@ -93,8 +130,13 @@ public class Car {
         y = GamePanel.dimY/2;
         panel.finishLevel();
     }
+  }
 
-    
+  private Point2D getMidpoint(Point2D p1, Point2D p2) {
+    return new Point2D.Double(
+      (p1.getX() + p2.getX()) / 2,
+      (p1.getY() + p2.getY()) / 2
+    );
   }
 
   public Rectangle2D getBounds() {
@@ -132,6 +174,24 @@ public class Car {
 
     g2d.setColor(Color.YELLOW);
     g2d.drawRect(centerX - carWidth / 2, centerY - carLength / 2, carWidth, carLength);
+
+    //calculates the corners of the car based on its position and size
+    int topLeftX = (int) (x - carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians));
+    int topLeftY = (int) (y - carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians));
+    int topRightX = (int) (x + carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians));
+    int topRightY = (int) (y + carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians));
+    int bottomLeftX = (int) (x - carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
+    int bottomLeftY = (int) (y - carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
+    int bottomRightX = (int) (x + carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
+    int bottomRightY = (int) (y + carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
+
+    //draws a dot at each corner of the car
+    g2d.setColor(Color.GREEN);
+    g2d.fillOval(topLeftX - 5, topLeftY - 5, 10, 10);
+    g2d.fillOval(topRightX - 5, topRightY - 5, 10, 10);
+    g2d.fillOval(bottomLeftX - 5, bottomLeftY - 5, 10, 10);
+    g2d.fillOval(bottomRightX - 5, bottomRightY - 5, 10, 10);
+    
   } 
 
   //setters and getters :D

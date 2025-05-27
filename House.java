@@ -40,6 +40,9 @@ public class House {
             g.setColor(color);
             g.fillRect(x, y, width, height);
         }
+        //draws the collision box
+        g.setColor(Color.BLUE);
+        g.draw(collisionBox);
     }
     public Rectangle2D.Double getCollisionBox() {
         return collisionBox;
