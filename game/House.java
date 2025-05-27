@@ -14,7 +14,7 @@ public class House {
         this.y = y-height/2;
 
         try{
-            houseImage = ImageIO.read(getClass().getResource("House.png"));
+            houseImage = ImageIO.read(getClass().getResource("/images/House.png"));
         } catch (IOException e)
         {
             e.printStackTrace();
