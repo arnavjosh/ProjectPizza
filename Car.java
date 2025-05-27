@@ -18,6 +18,8 @@ public class Car {
   private double steeringSpeed = Math.toRadians(3);
   private final double wheelBase = 20;
     private BufferedImage carImage;
+  private int centerX;
+  private int centerY;
 
   private boolean accelerating;
   private boolean turningLeft;
@@ -32,6 +34,8 @@ public class Car {
   public Car(double startX, double startY, GamePanel panel) {
     x = startX;
     y = startY;
+    centerX = (int) startX;
+    centerY = (int) startY;
     this.panel = panel;
     headingRadians = 0;
 
@@ -44,15 +48,6 @@ public class Car {
   }
 
   public void update(MapHandler mapHandler) {
-    for (House house : mapHandler.getCurrentHouses()) {
-        if (getBounds().intersects(house.getBounds())) {
-            //undoes any movment
-            x -= speed * Math.sin(headingRadians);
-            y += speed * Math.cos(headingRadians);
-            speed = -speed*0.2;
-        }
-    }
-
     if (turningLeft) {
       steeringAngle = Math.max(steeringAngle - steeringSpeed, -maxSteeringAngle);
     } else if (turningRight) {
@@ -114,7 +109,7 @@ public class Car {
   }
 
   //this method draws teh car at each frame and rotates the  
-  public void draw(Graphics2D g2d, int centerX, int centerY) {
+  public void draw(Graphics2D g2d) {
     int carWidth = 40;
     int carLength = 80;
     int bumperHeight = 10;
