@@ -29,17 +29,20 @@ public class Compass
         copyOfGraphics.drawLine(0, 0, 0, needleLength);  // South
 
 
-        copyOfGraphics.setTransform(new AffineTransform()); //resets transform so that letters wont get rotated
+        // Reset transform so text is not rotated
+        copyOfGraphics.setTransform(new AffineTransform());
+        copyOfGraphics.translate(x, y); // Top-left corner of compass
+
         copyOfGraphics.setFont(new Font("Arial", Font.BOLD, 14));
         copyOfGraphics.setColor(Color.WHITE);
         //north
-        copyOfGraphics.drawString("N", x + COMP_SIZE / 2 - 5, y + 12);
+        copyOfGraphics.drawString("N", COMP_SIZE / 2 - 5, 12);
         //south
-        copyOfGraphics.drawString("S", x + COMP_SIZE / 2 - 5, y + COMP_SIZE - 4);
+        copyOfGraphics.drawString("S", COMP_SIZE / 2 - 5, COMP_SIZE - 4);
         //east
-        copyOfGraphics.drawString("E", x + COMP_SIZE - 12, y + COMP_SIZE / 2 + 4);
+        copyOfGraphics.drawString("E", COMP_SIZE - 12, COMP_SIZE / 2 + 4);
         //west
-        copyOfGraphics.drawString("W", x + 4, y + COMP_SIZE / 2 + 4);
+        copyOfGraphics.drawString("W", 4, COMP_SIZE / 2 + 4);
         copyOfGraphics.dispose();
     }
 }
