@@ -20,13 +20,19 @@ public class Car {
 
   private double headingRadians;
   private double speed;
-  private double acceleration = 0.05;
+  private double acceleration = 0.1;
   private double maxSpeed = 10.0;
   private double friction = 0.97;;
   private double steeringAngle = 0;
-  private final double maxSteeringAngle = Math.toRadians(20);
-  private double steeringSpeed = Math.toRadians(10);
+  private final double maxSteeringAngle = Math.toRadians(25);
+  private double steeringSpeed = Math.toRadians(20);
   private final double wheelBase = 70;
+
+  private double velocityX = 0;
+  private double velocityY = 0;
+
+  private double driftFactor = 0.9; // Lower = more drift
+  private double gripFactor = 0.1;
 
   private BufferedImage carImage;
 
@@ -96,9 +102,11 @@ public class Car {
       if(getBounds().intersects(collidable.getCollisionBox()))
       {
         //reverses movement by a minimum of 0.5
-        x -= (speed*2) * Math.sin(headingRadians);
-        y += (speed*2) * Math.cos(headingRadians);
+        x -= velocityX;
+        y -= velocityY;
         speed = -1*(Math.signum(speed))*(Math.max(Math.abs(speed*0.2), 0.5));
+        velocityX = 0;
+        velocityY = 0;
         steeringAngle = 0;
       }
     }
@@ -131,14 +139,22 @@ public class Car {
       headingRadians += angularVelocity * Math.signum(steeringAngle);
     }
 
-    x += speed * Math.sin(headingRadians);
-    y -= speed * Math.cos(headingRadians);
+    double desiredVelocityX = speed * Math.sin(headingRadians);
+    double desiredVelocityY = -speed * Math.cos(headingRadians);
+
+    //simulate sliding
+    velocityX = velocityX * driftFactor + desiredVelocityX * gripFactor;
+    velocityY = velocityY * driftFactor + desiredVelocityY * gripFactor;
+
+    // Apply velocity
+    x += velocityX;
+    y += velocityY;
 
 
     //handles slowing down car if not on road (changes speed sigma boy)
     
     if (!mapHandler.isRoadAt(x, y)) {
-      speed *= friction;
+      speed *= friction*friction*friction;
     }
     RoadSegment segment = mapHandler.getSegmentAt(x, y);
     if (segment != null && segment.roadType == RoadSegment.Type.CHECKPOINT) {
@@ -149,7 +165,6 @@ public class Car {
         panel.finishLevel();
     }
 
-    steeringSpeed = Math.toRadians(10)/((Math.max(speed,1)));
   }
 
   private Point2D getMidpoint(Point2D p1, Point2D p2) {
