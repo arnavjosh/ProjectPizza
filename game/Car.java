@@ -20,13 +20,13 @@ public class Car {
 
   private double headingRadians;
   private double speed;
-  private double acceleration = 0.1;
-  private double maxSpeed = 15.0;
-  private double friction = 0.98;;
+  private double acceleration = 0.05;
+  private double maxSpeed = 10.0;
+  private double friction = 0.97;;
   private double steeringAngle = 0;
-  private final double maxSteeringAngle = Math.toRadians(10);
-  private double steeringSpeed = Math.toRadians(3);
-  private final double wheelBase = 20;
+  private final double maxSteeringAngle = Math.toRadians(20);
+  private double steeringSpeed = Math.toRadians(10);
+  private final double wheelBase = 70;
 
   private BufferedImage carImage;
 
@@ -95,9 +95,9 @@ public class Car {
     {
       if(getBounds().intersects(collidable.getCollisionBox()))
       {
-        //reverses movement
-        x -= speed * Math.sin(headingRadians);
-        y += speed * Math.cos(headingRadians);
+        //reverses movement by a minimum of 0.5
+        x -= (speed*2) * Math.sin(headingRadians);
+        y += (speed*2) * Math.cos(headingRadians);
         speed = -1*(Math.signum(speed))*(Math.max(Math.abs(speed*0.2), 0.5));
         steeringAngle = 0;
       }
@@ -141,10 +141,6 @@ public class Car {
       speed *= friction;
     }
     RoadSegment segment = mapHandler.getSegmentAt(x, y);
-
-    if (segment != null) {
-    System.out.println("Standing on segment: " + segment.roadType);
-  }
     if (segment != null && segment.roadType == RoadSegment.Type.CHECKPOINT) {
         speed = 0;
         headingRadians = 0;
@@ -152,6 +148,8 @@ public class Car {
         y = GamePanel.dimY/2;
         panel.finishLevel();
     }
+
+    steeringSpeed = Math.toRadians(10)/((Math.max(speed,1)));
   }
 
   private Point2D getMidpoint(Point2D p1, Point2D p2) {
@@ -163,14 +161,14 @@ public class Car {
 
   public Path2D getBounds() {
     //applies rotations to points based on headingRadians (insert starstruck emoji)
-    int topLeftX = (int) (x - carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians));
-    int topLeftY = (int) (y - carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians));
-    int topRightX = (int) (x + carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians));
-    int topRightY = (int) (y + carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians));
-    int bottomLeftX = (int) (x - carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
-    int bottomLeftY = (int) (y - carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
-    int bottomRightX = (int) (x + carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
-    int bottomRightY = (int) (y + carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
+    double topLeftX = (x - carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians));
+    double topLeftY = (y - carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians));
+    double topRightX =  (x + carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians));
+    double topRightY =  (y + carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians));
+    double bottomLeftX =  (x - carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
+    double bottomLeftY =  (y - carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
+    double bottomRightX =  (x + carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
+    double bottomRightY =  (y + carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
 
     Path2D path = new Path2D.Double();
     path.moveTo(topLeftX, topLeftY);

@@ -108,4 +108,27 @@ public class MapHandler
         currentLevelNum = (currentLevelNum+1)%levels.size();
         currentLevel = levels.get(currentLevelNum);
     }
+
+    public double getCheckpointX()
+    {
+        for(RoadSegment road : currentLevel.getRoadSegments())
+        {
+            if(road.roadType == RoadSegment.Type.CHECKPOINT)
+            {
+                return (int) road.getX();
+            }
+        }
+        return 0;
+    }
+    public double getCheckpointY()
+    {
+        for(RoadSegment road : currentLevel.getRoadSegments())
+        {
+            if(road.roadType == RoadSegment.Type.CHECKPOINT)
+            {
+                return (int) road.getY();
+            }
+        }
+        return 0;
+    }
 }

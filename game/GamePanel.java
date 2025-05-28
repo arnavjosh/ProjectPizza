@@ -70,7 +70,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         pizzaGraphic.drawString("Speed: " + ((int)(car.getSpeed()*100)/100.0), 20, 30);
         
 
-        compass.draw((Graphics2D)pizzaGraphic.create(),car.getHeading());
+        compass.draw((Graphics2D)pizzaGraphic.create(), car.getHeading() ,mapHandler.getCheckpointX(), mapHandler.getCheckpointY(),car.getX(), car.getY());
 
         //have to get rid of the graphics 2d according to stack
     }
