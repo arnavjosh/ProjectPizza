@@ -8,15 +8,14 @@ public class MapHandler
     //TODO: write levels class
     //TODO write up background objects
     private ArrayList<Level> levels;
-    private int currentLevel;
-
+    private int currentLevelNum = 0;
+    private Level currentLevel;
 
     public MapHandler()
     {
         levels = new ArrayList<Level>();
-        currentLevel = 0;
-
         loadLevels();
+        currentLevel = levels.get(currentLevelNum);
     }
 
     private void loadLevels()
@@ -60,20 +59,13 @@ public class MapHandler
         testLevel.addRightDown();     // → ↓ (now facing ↓)
         testLevel.addDownLeft();      // ↓ ← (now facing ←)
         testLevel.addLeftUp();        // ← ↑ (now facing ↑)
+        
 
-        // === Trees (non-intersecting locations) ===
-        testLevel.addBackgroundObject(new Tree(100, 100));
-        testLevel.addBackgroundObject(new Tree(400, 100));
-        testLevel.addBackgroundObject(new Tree(700, 200));
-        testLevel.addBackgroundObject(new Tree(100, 400));
-        testLevel.addBackgroundObject(new Tree(400, 700));
-        testLevel.addBackgroundObject(new Tree(700, 600));
-        testLevel.addBackgroundObject(new Tree(300, 500));
-        testLevel.addBackgroundObject(new Tree(200, 300));
-        testLevel.addBackgroundObject(new Tree(600, 400));
-        testLevel.addHouse(650,-275);
-        testLevel.addHouse(995,-275);
-        testLevel.addRoad(new RoadSegment(600,-225,0,RoadSegment.Type.CHECKPOINT));
+        testLevel.addTree(700, 200);
+        
+        testLevel.addHouse(650,-255);
+        testLevel.addHouse(995,-255);
+        testLevel.addRoad(new RoadSegment(600,-600,0,RoadSegment.Type.CHECKPOINT));
 
         levels.add(testLevel);
 
@@ -82,18 +74,17 @@ public class MapHandler
         level2.addRoad(new RoadSegment(0,0,0,RoadSegment.Type.CHECKPOINT));
 
         levels.add(level2);
+
     }
 
     public void draw(Graphics2D gameGraphics)
     {
-        Level level = levels.get(currentLevel);
-        level.draw(gameGraphics);
+        currentLevel.draw(gameGraphics);
     }
 
     public RoadSegment getSegmentAt(double x, double y)
     {
-        Level level = levels.get(currentLevel);
-        for(RoadSegment road : level.getRoadSegments())
+        for(RoadSegment road : currentLevel.getRoadSegments())
         {
             if(road.contains(x, y ))
                 return road;
@@ -106,24 +97,15 @@ public class MapHandler
         return getSegmentAt(x,y)!=null;
     }
 
-    public boolean isColliding(Point2D point){
-        Level level = levels.get(currentLevel);
-        for(House house : level.getHouses())
-        {
-            if(house.getCollisionBox().contains(point))
-                return true;
-        }
-        return false;
-    }
-    public ArrayList<House> getCurrentHouses() {
-        Level level = levels.get(currentLevel);
-        return level.getHouses();
+    public ArrayList<Collidable> getCurrentCollidables() {
+        return currentLevel.getCollidables();
     }
 
 
     public void incrementLevel()
     {
         //loops level using mod
-        currentLevel = (currentLevel+1)%levels.size();
+        currentLevelNum = (currentLevelNum+1)%levels.size();
+        currentLevel = levels.get(currentLevelNum);
     }
 }

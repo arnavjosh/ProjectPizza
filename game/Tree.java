@@ -1,29 +1,24 @@
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 
-public class Tree extends BackgroundObject
+public class Tree extends Collidable
 {
-    private static final double TREE_RADIUS = 20;
+    private static final int TREE_RADIUS = 80;
 
-    public Tree(double x, double y)
+    public Tree(int x, int y)
     {
-        super (x,y,0);
+        super (x,y, "/images/Tree.png");
+        collisionBox = createCollisionBox();
     }
-
-    public void draw(Graphics2D graphics)
+    public Rectangle2D.Double createCollisionBox()
     {
-        //safe teh position it was at
-        AffineTransform save = graphics.getTransform();
-
-        //transfomr to put the thingy in the middle so you can put it in
-        graphics.translate(x,y);
-
-        graphics.setColor(new Color(34,139,39)); //color for leaves
-
-        graphics.fill(new Ellipse2D.Double(-TREE_RADIUS,-TREE_RADIUS, TREE_RADIUS*2,TREE_RADIUS*2));
-
-        //go back to the old rotation and transformation
-        graphics.setTransform(save);
+        return new Rectangle2D.Double(x - TREE_RADIUS / 2.0, y - TREE_RADIUS / 2.0, TREE_RADIUS, TREE_RADIUS);
+    }
+    public void drawAlt(Graphics2D g)
+    {
+        //dark green
+        g.setColor(new Color(34, 139, 34)); // Forest Green
+        g.fill(new Ellipse2D.Double(x - TREE_RADIUS / 2.0, y - TREE_RADIUS / 2.0, TREE_RADIUS, TREE_RADIUS));
     }
 }

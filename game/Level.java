@@ -5,8 +5,7 @@ import java.util.ArrayList;
 public class Level
 {
     private ArrayList<RoadSegment> roads;
-    private ArrayList<BackgroundObject> backgroundObjects;
-    private ArrayList<House> houses;
+    private ArrayList<Collidable> collidables;
 
     private int newX, newY;
 
@@ -16,8 +15,7 @@ public class Level
     public Level()
     {
         roads = new ArrayList<>();
-        backgroundObjects = new ArrayList<>(); 
-        houses = new ArrayList<>();
+        collidables = new ArrayList<>();
         newX = GamePanel.dimX/2;
         newY = GamePanel.dimY/2 + roadLength/2;
     }
@@ -123,38 +121,33 @@ public class Level
     {
         roads.add(road);
     }
-    public void addBackgroundObject(BackgroundObject object)
+    public void addCollidable(Collidable object)
     {
-        backgroundObjects.add(object);
+        collidables.add(object);
     }
     public void addHouse(int x,int y)
     {
-        houses.add(new House(x,y));
+        collidables.add(new House(x,y));
+    }
+    public void addTree(int x, int y)
+    {
+        collidables.add(new Tree(x,y));
     }
     public void draw(Graphics2D graphics)
     {
-        for(BackgroundObject object : backgroundObjects){
-            object.draw(graphics);
-        }
-
         for(RoadSegment road : roads)
         {
             road.draw(graphics);
         }
-
-        for(House house : houses)
-        {
-            house.draw(graphics);
+        for(Collidable object : collidables){
+            object.draw(graphics);
         }
     }
     public ArrayList<RoadSegment> getRoadSegments(){
         return roads;
     }
-    public ArrayList<BackgroundObject> getBackgroundObjects()
+    public ArrayList<Collidable> getCollidables()
     {
-        return backgroundObjects;
-    }
-    public ArrayList<House> getHouses() {
-        return houses;
+        return collidables;
     }
 }

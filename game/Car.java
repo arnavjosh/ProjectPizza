@@ -91,9 +91,9 @@ public class Car {
     }
     */
 
-    for(House house : mapHandler.getCurrentHouses())
+    for(Collidable collidable : mapHandler.getCurrentCollidables())
     {
-      if(getBounds().intersects(house.getCollisionBox()))
+      if(getBounds().intersects(collidable.getCollisionBox()))
       {
         //reverses movement
         x -= speed * Math.sin(headingRadians);
@@ -141,6 +141,10 @@ public class Car {
       speed *= friction;
     }
     RoadSegment segment = mapHandler.getSegmentAt(x, y);
+
+    if (segment != null) {
+    System.out.println("Standing on segment: " + segment.roadType);
+  }
     if (segment != null && segment.roadType == RoadSegment.Type.CHECKPOINT) {
         speed = 0;
         headingRadians = 0;
@@ -188,11 +192,11 @@ public class Car {
     if(carImage!=null)
     {
         //no imageobserver so we pass in null for that
-        g2d.drawImage(carImage, centerX - carWidth / 2, centerY - carLength / 2, carWidth, carLength, null);
+        g2d.drawImage(carImage, centerX - carImage.getWidth() / 2, centerY - carImage.getHeight() / 2, carImage.getWidth(),carImage.getHeight(), null);
     }
     else{
       g2d.setColor(Color.RED);
-      g2d.drawImage(carImage, centerX - carWidth / 2, centerY - carLength / 2, carWidth, carLength, null);
+      g2d.drawImage(carImage, centerX - carWidth / 2, centerY - carLength / 2, carImage.getWidth(),carImage.getHeight(), null);
 
 
       g2d.setColor(Color.BLACK);
@@ -201,24 +205,6 @@ public class Car {
 
     g2d.setColor(Color.YELLOW);
     g2d.drawRect(centerX - carWidth / 2, centerY - carLength / 2, carWidth, carLength);
-
-    //calculates the corners of the car based on its position and size
-    int topLeftX = (int) (x - carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians));
-    int topLeftY = (int) (y - carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians));
-    int topRightX = (int) (x + carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians));
-    int topRightY = (int) (y + carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians));
-    int bottomLeftX = (int) (x - carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
-    int bottomLeftY = (int) (y - carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
-    int bottomRightX = (int) (x + carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
-    int bottomRightY = (int) (y + carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
-
-    //draws a dot at each corner of the car
-    g2d.setColor(Color.GREEN);
-    g2d.fillOval(topLeftX - 5, topLeftY - 5, 10, 10);
-    g2d.fillOval(topRightX - 5, topRightY - 5, 10, 10);
-    g2d.fillOval(bottomLeftX - 5, bottomLeftY - 5, 10, 10);
-    g2d.fillOval(bottomRightX - 5, bottomRightY - 5, 10, 10);
-    
   } 
 
   //setters and getters :D
