@@ -12,6 +12,8 @@ public class Level
     private static int roadWidth = RoadSegment.getWidth();
     private static int  roadLength = RoadSegment.getLength();
 
+    private int overlap = 1;
+
     public Level()
     {
         roads = new ArrayList<>();
@@ -21,8 +23,9 @@ public class Level
     }
     public void addUp()
     {
+        //with overlap
         addRoad(new RoadSegment(newX,newY,0,RoadSegment.Type.STRAIGHT));
-        newY-=roadLength;
+        newY -= roadLength - overlap;
     }
     
     public void addUp(int n)
@@ -35,7 +38,7 @@ public class Level
     public void addDown()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(180),RoadSegment.Type.STRAIGHT));
-        newY+=roadLength;
+        newY += roadLength - overlap;
     }
     public void addDown(int n)
     {
@@ -47,7 +50,7 @@ public class Level
     public void addLeft()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(-90),RoadSegment.Type.STRAIGHT));
-        newX-=roadLength;
+        newX -= roadLength - overlap;
     }
     public void addLeft(int n)
     {
@@ -59,7 +62,7 @@ public class Level
     public void addRight()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(90),RoadSegment.Type.STRAIGHT));
-        newX+=roadLength;
+        newX += roadLength - overlap;
     }
     public void addRight(int n)
     {
@@ -71,50 +74,50 @@ public class Level
     public void addUpRight()
     {
         addRoad(new RoadSegment(newX,newY,0,RoadSegment.Type.CURVE_RIGHT));
-        newX +=roadWidth/2.0;
+        newX +=roadWidth/2.0 - overlap;
         newY -=roadWidth/2.0;
     }
     public void addUpLeft()
     {
         addRoad(new RoadSegment(newX,newY,0,RoadSegment.Type.CURVE_LEFT));
-        newX -= roadWidth/2.0;
-        newY -= roadWidth/2.0;
+        newX -=roadWidth/2.0 - overlap;
+        newY -=roadWidth/2.0;
     }
     public void addLeftDown()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(-90),RoadSegment.Type.CURVE_LEFT));
-        newY+=roadWidth/2.0;
-        newX-=roadWidth/2.0;
+        newY += roadWidth/2.0 - overlap;
+        newX -= roadWidth/2.0;
     }
     public void addRightDown()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(90),RoadSegment.Type.CURVE_RIGHT));
-        newY+=roadWidth/2.0;
-        newX+=roadWidth/2.0;
+        newY += roadWidth/2.0 - overlap;
+        newX += roadWidth/2.0;
     }
     public void addDownRight()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(-180),RoadSegment.Type.CURVE_LEFT));
-        newY+=roadWidth/2.0;
-        newX+=roadWidth/2.0;
+        newY += roadWidth/2.0;
+        newX += roadWidth/2.0 - overlap;
     }
     public void addDownLeft()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(-180),RoadSegment.Type.CURVE_RIGHT));
-        newY+=roadWidth/2.0;
-        newX-=roadWidth/2.0;
+        newY += roadWidth/2.0;
+        newX -= roadWidth/2.0 - overlap;
     }
     public void addRightUp()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(90),RoadSegment.Type.CURVE_LEFT));
-        newX+=roadWidth/2.0;
-        newY-=roadWidth/2.0;
+        newX += roadWidth/2.0;
+        newY -= roadWidth/2.0;
     }
     public void addLeftUp()
     {
         addRoad(new RoadSegment(newX,newY,Math.toRadians(-90),RoadSegment.Type.CURVE_RIGHT));
-        newX-=roadWidth/2.0;
-        newY-=roadWidth/2.0;
+        newX -= roadWidth/2.0 + overlap;
+        newY -= roadWidth/2.0;
     }
 
     public void addRoad(RoadSegment road)

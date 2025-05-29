@@ -75,6 +75,20 @@ public class MapHandler
 
         levels.add(level2);
 
+        //adds a loop level
+
+        Level loopLevel = new Level();
+        loopLevel.addUp(5);           // Facing ↑
+        loopLevel.addUpLeft();
+        loopLevel.addLeft(5);         // ←
+        loopLevel.addLeftDown();      // ← ↓ (now facing ↓)
+        loopLevel.addDown(5);         // ↓
+        loopLevel.addDownRight();     // ↓ → (now facing →)
+        loopLevel.addRight(5);        // →
+        loopLevel.addRightUp();       // → ↑ (now facing ↑)
+        
+        levels.add(loopLevel);
+
     }
 
     public void draw(Graphics2D gameGraphics)

@@ -64,12 +64,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
         Graphics2D carGraphics = (Graphics2D)pizzaGraphic.create();
         car.draw(carGraphics);
+        //draws thick yellow boundary around the screen if car is off road
+        if(!car.isOnRoad())
+        {
+            carGraphics.setColor(Color.YELLOW);
+            carGraphics.setStroke(new BasicStroke(15));
+            carGraphics.drawRect(0, 0, dimX, dimY);
+        }
         carGraphics.dispose();
         pizzaGraphic.setColor(Color.BLACK);
         pizzaGraphic.setFont(new Font("Arial", Font.BOLD, 16));
         pizzaGraphic.drawString("Speed: " + ((int)(car.getSpeed()*100)/100.0), 20, 30);
-        
-
         compass.draw((Graphics2D)pizzaGraphic.create(), car.getHeading() ,mapHandler.getCheckpointX(), mapHandler.getCheckpointY(),car.getX(), car.getY());
 
         //have to get rid of the graphics 2d according to stack

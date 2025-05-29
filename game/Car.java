@@ -20,12 +20,12 @@ public class Car {
 
   private double headingRadians;
   private double speed;
-  private double acceleration = 0.1;
-  private double maxSpeed = 15.0;
+  private double acceleration = 0.2;
+  private double maxSpeed = 20.0;
   private double friction = 0.97;;
   private double steeringAngle = 0;
   private final double maxSteeringAngle = Math.toRadians(25);
-  private double steeringSpeed = Math.toRadians(20);
+  private double steeringSpeed = Math.toRadians(2.5);
   private final double wheelBase = 70;
 
   private double velocityX = 0;
@@ -40,6 +40,9 @@ public class Car {
   private boolean turningLeft;
   private boolean turningRight;
   private boolean braking;
+
+  private boolean onRoad = true;
+  private int numCollisions = 0;
 
   private GamePanel panel;
 
@@ -108,6 +111,13 @@ public class Car {
         velocityX = 0;
         velocityY = 0;
         steeringAngle = 0;
+        numCollisions++;
+        if(numCollisions >= 3)
+        {
+          //if you hit too many times, reset the car
+          nextLevel();
+          numCollisions = 0;
+        }
       }
     }
 
@@ -154,24 +164,26 @@ public class Car {
     //handles slowing down car if not on road (changes speed sigma boy)
     
     if (!mapHandler.isRoadAt(x, y)) {
-      speed *= friction*friction*friction;
+      onRoad = false;
+      speed *= friction*friction;
+    }
+    else {
+      onRoad = true;
     }
     RoadSegment segment = mapHandler.getSegmentAt(x, y);
     if (segment != null && segment.roadType == RoadSegment.Type.CHECKPOINT) {
-        speed = 0;
-        headingRadians = 0;
-        x = GamePanel.dimX/2;
-        y = GamePanel.dimY/2;
-        panel.finishLevel();
+        nextLevel();
     }
 
   }
 
-  private Point2D getMidpoint(Point2D p1, Point2D p2) {
-    return new Point2D.Double(
-      (p1.getX() + p2.getX()) / 2,
-      (p1.getY() + p2.getY()) / 2
-    );
+  public void nextLevel()
+  {
+    speed = 0;
+    headingRadians = 0;
+    x = GamePanel.dimX/2;
+    y = GamePanel.dimY/2;
+    panel.finishLevel();
   }
 
   public Path2D getBounds() {
@@ -215,9 +227,6 @@ public class Car {
       g2d.setColor(Color.BLACK);
       g2d.fillRect(centerX, centerY, carWidth, bumperHeight);
     }
-
-    g2d.setColor(Color.YELLOW);
-    g2d.drawRect(centerX - carWidth / 2, centerY - carLength / 2, carWidth, carLength);
   } 
 
   //setters and getters :D
@@ -254,5 +263,9 @@ public class Car {
 
   public double getHeading() {
     return headingRadians;
+  }
+
+  public boolean isOnRoad() {
+    return onRoad;
   }
 } 
