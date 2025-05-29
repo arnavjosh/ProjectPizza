@@ -21,7 +21,7 @@ public class Car {
   private double headingRadians;
   private double speed;
   private double acceleration = 0.1;
-  private double maxSpeed = 10.0;
+  private double maxSpeed = 5.0;
   private double friction = 0.97;;
   private double steeringAngle = 0;
   private final double maxSteeringAngle = Math.toRadians(25);
@@ -31,7 +31,7 @@ public class Car {
   private double velocityX = 0;
   private double velocityY = 0;
 
-  private double driftFactor = 0.9; // Lower = more drift
+  private double driftFactor = 0.87; // Lower = more drift
   private double gripFactor = 0.1;
 
   private BufferedImage carImage;
