@@ -21,7 +21,7 @@ public class Car {
   private double headingRadians;
   private double speed;
   private double acceleration = 0.1;
-  private double maxSpeed = 5.0;
+  private double maxSpeed = 15.0;
   private double friction = 0.97;;
   private double steeringAngle = 0;
   private final double maxSteeringAngle = Math.toRadians(25);
@@ -104,7 +104,7 @@ public class Car {
         //reverses movement by a minimum of 0.5
         x -= velocityX;
         y -= velocityY;
-        speed = -1*(Math.signum(speed))*(Math.max(Math.abs(speed*0.2), 0.5));
+        speed = -4*(Math.signum(speed))*(Math.max(Math.abs(speed*0.2), 0.5));
         velocityX = 0;
         velocityY = 0;
         steeringAngle = 0;
