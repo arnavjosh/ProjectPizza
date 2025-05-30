@@ -18,6 +18,19 @@ public class MapHandler
         currentLevel = levels.get(currentLevelNum);
     }
 
+    public void setLevel(int levelNum)
+    {
+        if(levelNum >= 0 && levelNum < levels.size())
+        {
+            currentLevelNum = levelNum;
+            currentLevel = levels.get(currentLevelNum);
+        }
+        else
+        {
+            System.out.println("Invalid level number: " + levelNum);
+        }
+    }
+
     private void loadLevels()
     {
         Level testLevel = new Level();
@@ -66,14 +79,12 @@ public class MapHandler
         testLevel.addHouse(650,-255);
         testLevel.addHouse(995,-255);
         testLevel.addRoad(new RoadSegment(600,-600,0,RoadSegment.Type.CHECKPOINT));
-
-        levels.add(testLevel);
+        testLevel.addDominos(-25, 84);
 
         Level level2 = new Level();
         level2.addUp(20);
         level2.addRoad(new RoadSegment(0,0,0,RoadSegment.Type.CHECKPOINT));
 
-        levels.add(level2);
 
         //adds a loop level
 
@@ -86,14 +97,79 @@ public class MapHandler
         loopLevel.addDownRight();     // ↓ → (now facing →)
         loopLevel.addRight(5);        // →
         loopLevel.addRightUp();       // → ↑ (now facing ↑)
-        
-        levels.add(loopLevel);
 
+        Level level0 = new Level();
+        level0.addUp(5);
+        level0.addUpRight();       // ↑ →
+        level0.addRight(5);        // →
+        level0.addRightDown();     // → ↓ (now facing ↓)
+        level0.addDown(2);         // ↓
+        level0.addDownLeft();      // ↓ ← (now facing ←)
+        level0.addLeft(5);         // ←
+        level0.addLeftUp();        // ← ↑ (now facing ↑)
+        level0.addUp(5);           // ↑
+        level0.addUpRight();       // ↑ →
+        level0.addRight(5);        // →
+        level0.addRightDown();     // → ↓ (now facing ↓)
+        level0.addDown(2);         // ↓
+        level0.addDownLeft();      // ↓ ← (now facing ←)
+        level0.addLeft(5);         // ←
+        level0.addLeftUp();        // ← ↑ (now facing ↑)
+        level0.addUp(5);           // ↑
+        level0.addUpRight();       // ↑ →
+        level0.addRight(5);        // →
+        level0.addRightDown();     // → ↓ (now facing ↓)
+        level0.addDown(2);         // ↓
+        level0.addDownLeft();      // ↓ ← (now facing ←)
+        level0.addLeft(5);         // ←
+        level0.addLeftUp();        // ← ↑ (now facing ↑)
+        level0.addUp(5);           // ↑
+        level0.addUpLeft();
+        level0.addLeft(5);         // ←
+        level0.addLeftDown();      // ← ↓ (now facing ↓)
+        level0.addDown(5);         // ↓
+        level0.addDownRight();     // ↓ → (now facing →)
+        level0.addRight(5);        // →
+        level0.addRightUp();       // → ↑ (now facing ↑)
+        level0.addUp(5);           // ↑
+        level0.addUpRight();       // ↑ →
+        level0.addRight(5);        // →
+        level0.addRightDown();     // → ↓ (now facing ↓)
+        level0.addDown(2);         // ↓
+        level0.addDownLeft();      // ↓ ← (now facing ←)
+        level0.addLeft(5);         // ←
+        level0.addLeftUp();        // ← ↑ (now facing ↑)
+
+
+
+        level0.addDominos(415, 500);
+        level0.addHouse(675, -252);
+        level0.addHouse(1000, -252);
+        //subtract 450 from y for each level up
+        level0.addHouse(675, -702);
+        level0.addHouse(1000, -702);
+        level0.addHouse(675, -1152);
+        level0.addHouse(1000, -1152);
+
+        level0.addTreeCluster(550,200);
+        level0.addTreeCluster(785,438);
+        level0.addTreeCluster(743,605);
+        level0.addTreeCluster(581,800);
+        levels.add(level0);
     }
-
     public void draw(Graphics2D gameGraphics)
     {
         currentLevel.draw(gameGraphics);
+    }
+
+    public void drawRoads(Graphics2D gameGraphics)
+    {
+        currentLevel.drawRoads(gameGraphics);
+    }
+
+    public void drawCollidables(Graphics2D gameGraphics)
+    {
+        currentLevel.drawCollidables(gameGraphics);
     }
 
     public RoadSegment getSegmentAt(double x, double y)

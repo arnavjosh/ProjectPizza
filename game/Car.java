@@ -15,13 +15,13 @@ public class Car {
   private int centerX;
   private int centerY;
 
-  private int carWidth = 40;
-  private int carLength = 80;
+  private int carWidth = 50;
+  private int carLength = 100;
 
   private double headingRadians;
   private double speed;
   private double acceleration = 0.2;
-  private double maxSpeed = 20.0;
+  private double maxSpeed = 15.0;
   private double friction = 0.97;;
   private double steeringAngle = 0;
   private final double maxSteeringAngle = Math.toRadians(25);
@@ -112,10 +112,10 @@ public class Car {
         velocityY = 0;
         steeringAngle = 0;
         numCollisions++;
-        if(numCollisions >= 3)
+        if(numCollisions >= 100)
         {
           //if you hit too many times, reset the car
-          nextLevel();
+          reset();
           numCollisions = 0;
         }
       }
@@ -206,6 +206,22 @@ public class Car {
     return path;
   }
 
+  public void reset()
+  {
+    speed = 0;
+    headingRadians = 0;
+    x = GamePanel.dimX / 2;
+    y = GamePanel.dimY / 2;
+    accelerating = false;
+    turningLeft = false;
+    turningRight = false;
+    braking = false;
+    onRoad = true;
+    numCollisions = 0;
+    velocityX = 0;
+    velocityY = 0;
+  }
+
   //this method draws teh car at each frame and rotates the  
   public void draw(Graphics2D g2d) {
     int carWidth = 40;
@@ -267,5 +283,9 @@ public class Car {
 
   public boolean isOnRoad() {
     return onRoad;
+  }
+
+  public int getCollisions() {
+    return numCollisions;
   }
 } 

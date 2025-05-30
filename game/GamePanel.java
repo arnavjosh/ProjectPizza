@@ -18,6 +18,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     public static final int centerX = dimX / 2;
     public static final int centerY = dimY / 2;
 
+    private int startTime;
+
     public GamePanel(ProjectPizza game) {
         this.game = game;
         setPreferredSize(new Dimension(800, 600));
@@ -36,12 +38,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         //16 ms is 60 fps
         timer = new Timer(16, this);
         timer.start();
+        startTime = (int) System.currentTimeMillis();
     }
 
     public void finishLevel()
     {
-        game.addPoints(1);
+        game.addPoints(1000/(int)((int)(System.currentTimeMillis() - startTime)/1000.0));
         mapHandler.incrementLevel();
+        startTime = (int) System.currentTimeMillis();
     }
 
     protected void paintComponent(Graphics pizzaGraphic)
@@ -57,13 +61,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         pizza2d.translate(centerX, centerY);
         pizza2d.rotate(-car.getHeading());
         pizza2d.translate(-car.getX(),-car.getY());
-
-        mapHandler.draw(pizza2d);
-
-        pizza2d.dispose();
-
+        mapHandler.drawRoads(pizza2d);
         Graphics2D carGraphics = (Graphics2D)pizzaGraphic.create();
         car.draw(carGraphics);
+        mapHandler.drawCollidables(pizza2d);
         //draws thick yellow boundary around the screen if car is off road
         if(!car.isOnRoad())
         {
@@ -71,10 +72,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
             carGraphics.setStroke(new BasicStroke(15));
             carGraphics.drawRect(0, 0, dimX, dimY);
         }
+
+        pizza2d.dispose();
+
         carGraphics.dispose();
         pizzaGraphic.setColor(Color.BLACK);
         pizzaGraphic.setFont(new Font("Arial", Font.BOLD, 16));
         pizzaGraphic.drawString("Speed: " + ((int)(car.getSpeed()*100)/100.0), 20, 30);
+        pizzaGraphic.drawString("Time: " + ((int)(System.currentTimeMillis() - startTime)/1000.0) + " seconds", 20, 50);
+        pizzaGraphic.drawString("Collisions: " + car.getCollisions(), 20, 90);
         compass.draw((Graphics2D)pizzaGraphic.create(), car.getHeading() ,mapHandler.getCheckpointX(), mapHandler.getCheckpointY(),car.getX(), car.getY());
 
         //have to get rid of the graphics 2d according to stack
@@ -99,8 +105,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         if (code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S)
             car.setBraking(true);
         if (code == KeyEvent.VK_R){
-            mapHandler = new MapHandler();
-            car = new Car(dimX/2,dimY/2,this);
+            car.reset();
         }
         if (code == KeyEvent.VK_T){
             System.out.println("X: "+car.getX()+", Y: "+car.getY());

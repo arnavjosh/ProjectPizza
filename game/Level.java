@@ -136,6 +136,10 @@ public class Level
     {
         collidables.add(new Tree(x,y));
     }
+    public void addDominos(int x, int y)
+    {
+        collidables.add(new Dominos(x,y));
+    }
     public void draw(Graphics2D graphics)
     {
         for(RoadSegment road : roads)
@@ -145,6 +149,25 @@ public class Level
         for(Collidable object : collidables){
             object.draw(graphics);
         }
+    }
+    public void drawRoads(Graphics2D graphics)
+    {
+        for(RoadSegment road : roads)
+        {
+            road.draw(graphics);
+        }
+    }
+    public void drawCollidables(Graphics2D graphics)
+    {
+        for(Collidable object : collidables){
+            object.draw(graphics);
+        }
+    }
+    public void addTreeCluster(int x, int y)
+    {
+        addTree(x-30,y-20);
+        addTree(x+30,y);
+        addTree(x,y+40);
     }
     public ArrayList<RoadSegment> getRoadSegments(){
         return roads;
