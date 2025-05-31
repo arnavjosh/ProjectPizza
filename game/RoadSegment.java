@@ -94,9 +94,8 @@ public class RoadSegment
         graphics.transform(optimusPrime);
         graphics.setColor(getColor());
         graphics.fill(roadShape);
-        graphics.setColor(Color.RED);
-        double dotRadius = 14;
-        graphics.fill(new Ellipse2D.Double(-dotRadius / 2.0, -dotRadius / 2.0, dotRadius, dotRadius));
+        //double dotRadius = 14;
+        //graphics.fill(new Ellipse2D.Double(-dotRadius / 2.0, -dotRadius / 2.0, dotRadius, dotRadius));
         graphics.setTransform(saveTransform);
     }
     private Color getColor()
