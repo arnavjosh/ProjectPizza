@@ -15,6 +15,9 @@ public class Car {
   private int centerX;
   private int centerY;
 
+  private int startX;
+  private int startY;
+
   private int carWidth = 50;
   private int carLength = 100;
 
@@ -54,6 +57,8 @@ public class Car {
     y = startY;
     centerX = startX;
     centerY = startY;
+    this.startX = startX;
+    this.startY = startY;
     this.panel = panel;
     headingRadians = 0;
 
@@ -67,6 +72,8 @@ public class Car {
 
   public void update(MapHandler mapHandler) {
 
+    centerX = GamePanel.dimX / 2;
+    centerY = GamePanel.dimY / 2;
     /*
     //gets all of the corners
     ArrayList<Point2D> cornersAndMidsections = new ArrayList<>();
@@ -104,10 +111,22 @@ public class Car {
     {
       if(getBounds().intersects(collidable.getCollisionBox()))
       {
-        //reverses movement by a minimum of 0.5
-        x -= velocityX;
-        y -= velocityY;
-        speed = -4*(Math.signum(speed))*(Math.max(Math.abs(speed*0.2), 0.5));
+        //moves car away from the center of the collidable by a given distance
+        double dx = x - collidable.getCollisionBox().getCenterX();
+        double dy = y - collidable.getCollisionBox().getCenterY();
+        double distance = Math.sqrt(dx * dx + dy * dy);
+        double moveDistance = 1; // Distance to move away from the collidable
+        if (distance > 0) {
+          dx /= distance;
+          dy /= distance;
+        } else {
+          dx = 0;
+          dy = 0;
+        }
+        x += dx * moveDistance;
+        y += dy * moveDistance;
+
+        speed = -(Math.signum(speed))*(Math.max(Math.abs(speed*0.2), 0.5));
         velocityX = 0;
         velocityY = 0;
         steeringAngle = 0;
@@ -210,8 +229,8 @@ public class Car {
   {
     speed = 0;
     headingRadians = 0;
-    x = GamePanel.dimX / 2;
-    y = GamePanel.dimY / 2;
+    x = startX;
+    y = startY;
     accelerating = false;
     turningLeft = false;
     turningRight = false;

@@ -15,15 +15,16 @@ public abstract class GraphicObject
         this.y = y;
         this.image = getImage(imagePath);
     }
+    public BufferedImage getImage() 
+    {
+        return image;
+    }
     public void draw(Graphics2D g)
     {
         if(image!=null)
         {
             //no imageobserver so we pass in null for that
             g.drawImage(image,x-image.getWidth()/2,y-image.getHeight()/2,image.getWidth(),image.getHeight(),null);
-            //draw the collision box
-            //g.setColor(Color.BLUE);
-            //g.draw(collisionBox);
         }
     }
     public BufferedImage getImage(String imagePath) 

@@ -12,11 +12,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     private Compass compass;
     private Car car;
 
-    public static final int dimX = 800;
-    public static final int dimY = 600;
+    public static int dimX = 800;
+    public static int dimY = 600;
 
-    public static final int centerX = dimX / 2;
-    public static final int centerY = dimY / 2;
+    public static int centerX = dimX / 2;
+    public static int centerY = dimY / 2;
 
     private int startTime;
 
@@ -51,6 +51,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     protected void paintComponent(Graphics pizzaGraphic)
     {
         super.paintComponent(pizzaGraphic);
+        dimX = getWidth();
+        dimY = getHeight();
+        centerX = dimX / 2;
+        centerY = dimY / 2;
         pizzaGraphic.setColor(Color.GREEN);
         pizzaGraphic.fillRect(0, 0, getWidth(), getHeight());
         //casts a copy of the graphic to a graphic 2d which lets us transform it with the affine thingy

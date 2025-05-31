@@ -7,9 +7,7 @@ import javax.imageio.ImageIO;
 
 public abstract class Collidable extends GraphicObject
 {
-    protected int x, y;
     private Color color = Color.RED;
-    private BufferedImage image;
     protected Rectangle2D collisionBox;
     public  Collidable(int x, int y, String imagePath) 
     {
@@ -18,10 +16,10 @@ public abstract class Collidable extends GraphicObject
     public abstract Rectangle2D.Double createCollisionBox();
     public void draw(Graphics2D g)
     {
-        if(image!=null)
+        if(getImage()!=null)
         {
             //no imageobserver so we pass in null for that
-            g.drawImage(image,x-image.getWidth()/2,y-image.getHeight()/2,image.getWidth(),image.getHeight(),null);
+            g.drawImage(getImage(),x-getImage().getWidth()/2,y-getImage().getHeight()/2,getImage().getWidth(),getImage().getHeight(),null);
             //draw the collision box
             //g.setColor(Color.BLUE);
             //g.draw(collisionBox);

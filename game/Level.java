@@ -6,6 +6,7 @@ public class Level
 {
     private ArrayList<RoadSegment> roads;
     private ArrayList<Collidable> collidables;
+    private ArrayList<GraphicObject> backgroundObjects;
 
     private int newX, newY;
 
@@ -149,6 +150,9 @@ public class Level
         for(Collidable object : collidables){
             object.draw(graphics);
         }
+        for(GraphicObject backgroundObject : backgroundObjects){
+            backgroundObject.draw(graphics);
+        }
     }
     public void drawRoads(Graphics2D graphics)
     {
@@ -162,6 +166,10 @@ public class Level
         for(Collidable object : collidables){
             object.draw(graphics);
         }
+    }
+    public void addBackgroundObject(GraphicObject object)
+    {
+        backgroundObjects.add(object);
     }
     public void addTreeCluster(int x, int y)
     {
