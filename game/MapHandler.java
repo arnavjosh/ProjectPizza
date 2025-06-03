@@ -160,7 +160,7 @@ public class MapHandler
 
         level0.addDominos(415, 500);
         level0.addHouse(675, -238);
-        level0.addCheckpointHouse(1000, -238); // This is the checkpoint house
+        level0.addCheckpoint(1000, -238); // This is the checkpoint house
         //subtract 450 from y for each level up
         level0.addHouse(675, -688);
         level0.addHouse(1000, -688);

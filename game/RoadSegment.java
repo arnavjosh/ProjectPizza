@@ -54,9 +54,9 @@ public class RoadSegment
                 tShape.add(new Area(new Rectangle2D.Double(-ROAD_WIDTH/4.0,-ROAD_WIDTH, ROAD_WIDTH/2.0,ROAD_WIDTH)));
                 return tShape;
             case CHECKPOINT:
-                int length = 360;
-                int width = 260;
-                return new Rectangle2D.Double(-width / 2.0, -length, width, length);
+                int length = 260;
+                int width = 360;
+                return new Rectangle2D.Double(-width/2.0,-length/2.0, width, length);
         }
         return null;
     }

@@ -189,7 +189,9 @@ public class Car {
     else {
       onRoad = true;
     }
-    RoadSegment segment = mapHandler.getSegmentAt(x, y);
+    double frontOfCarX = x + carLength / 2 * Math.sin(headingRadians);
+    double frontOfCarY = y - carLength / 2 * Math.cos(headingRadians);
+    RoadSegment segment = mapHandler.getSegmentAt(frontOfCarX, frontOfCarY);
     if (segment != null && segment.roadType == RoadSegment.Type.CHECKPOINT) {
         nextLevel();
     }
@@ -199,6 +201,8 @@ public class Car {
   public void nextLevel()
   {
     speed = 0;
+    velocityX = 0;
+    velocityY = 0;
     headingRadians = 0;
     x = GamePanel.dimX/2;
     y = GamePanel.dimY/2;
@@ -281,6 +285,10 @@ public class Car {
   public void setBraking(boolean braking)
   {
     this.braking = braking;
+  }
+  
+  public void setCollisions(int numCollisions) {
+    this.numCollisions = numCollisions;
   }
 
     public double getSpeed()

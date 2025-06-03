@@ -135,7 +135,7 @@ public class Level
         collidables.add(new House(x,y));
         //backgroundObjects.add(new GraphicObject(x,y,"/images/HouseShadow.png"));
     }
-    public void addCheckpointHouse(int x, int y)
+    public void addCheckpoint(int x, int y)
     {
         addRoad(new RoadSegment(x,y,0,RoadSegment.Type.CHECKPOINT));
         collidables.add(new House(x,y));

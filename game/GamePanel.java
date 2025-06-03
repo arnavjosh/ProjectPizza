@@ -20,6 +20,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
     private int startTime;
 
+    private JButton instructionsButton, creditsButton;
+    private boolean showPauseMenu = false;
+    private boolean isPaused = false;
+    private JButton resumeButton, restartButton, quitButton;
+
     public GamePanel(ProjectPizza game) {
         this.game = game;
         setPreferredSize(new Dimension(800, 600));
@@ -39,6 +44,47 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         timer = new Timer(16, this);
         timer.start();
         startTime = (int) System.currentTimeMillis();
+
+        resumeButton = new JButton("Resume");
+        restartButton = new JButton("Restart");
+        quitButton = new JButton("Quit");
+
+        resumeButton.setBounds(centerX - 75, centerY - 60, 150, 40);
+        restartButton.setBounds(centerX - 75, centerY, 150, 40);
+        quitButton.setBounds(centerX - 75, centerY + 60, 150, 40);
+
+        resumeButton.addActionListener(e -> resumeGame());
+        restartButton.addActionListener(e -> resetGame());
+        quitButton.addActionListener(e -> System.exit(0));
+
+        resumeButton.setVisible(false);
+        restartButton.setVisible(false);
+        quitButton.setVisible(false);
+
+        // Absolute positioning
+        setLayout(null);
+        add(resumeButton);
+        add(restartButton);
+        add(quitButton);
+
+        instructionsButton = new JButton("Instructions");
+        creditsButton = new JButton("Credits");
+
+        instructionsButton.setBounds(centerX - 75, centerY + 120, 150, 40);
+        creditsButton.setBounds(centerX - 75, centerY + 180, 150, 40);
+
+        instructionsButton.addActionListener(e ->
+            JOptionPane.showMessageDialog(this, getInstructions(), "Instructions", JOptionPane.INFORMATION_MESSAGE));
+
+        creditsButton.addActionListener(e ->
+            JOptionPane.showMessageDialog(this, getCredits(), "Credits", JOptionPane.INFORMATION_MESSAGE));
+
+        instructionsButton.setVisible(false);
+        creditsButton.setVisible(false);
+
+        add(instructionsButton);
+        add(creditsButton);
+
     }
 
     public void finishLevel()
@@ -55,6 +101,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         dimY = getHeight();
         centerX = dimX / 2;
         centerY = dimY / 2;
+        resumeButton.setBounds(centerX - 75, centerY - 60, 150, 40);
+        restartButton.setBounds(centerX - 75, centerY, 150, 40);
+        quitButton.setBounds(centerX - 75, centerY + 60, 150, 40);
+        instructionsButton.setBounds(centerX - 75, centerY + 120, 150, 40);
+        creditsButton.setBounds(centerX - 75, centerY + 180, 150, 40);
         pizzaGraphic.setColor(Color.GREEN);
         pizzaGraphic.fillRect(0, 0, getWidth(), getHeight());
         //casts a copy of the graphic to a graphic 2d which lets us transform it with the affine thingy
@@ -89,6 +140,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         compass.draw((Graphics2D)pizzaGraphic.create(), car.getHeading() ,mapHandler.getCheckpointX(), mapHandler.getCheckpointY(),car.getX(), car.getY());
 
         //have to get rid of the graphics 2d according to stack
+
+        if (showPauseMenu) {
+            Graphics2D g2 = (Graphics2D) pizzaGraphic.create();
+            g2.setColor(new Color(0, 0, 0, 150)); // translucent dark overlay
+            g2.fillRect(0, 0, getWidth(), getHeight());
+
+            g2.setColor(Color.WHITE);
+            g2.setFont(new Font("Arial", Font.BOLD, 36));
+            drawCenteredString(g2, "Game Paused", getWidth(), centerY - 100);
+            g2.dispose();
+        }
     }
 
     public void actionPerformed(ActionEvent e)
@@ -115,6 +177,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         if (code == KeyEvent.VK_T){
             System.out.println("X: "+car.getX()+", Y: "+car.getY());
         }
+        if (code == KeyEvent.VK_P) {
+            if (!showPauseMenu) {
+                pauseGame();
+            } else {
+                resumeGame();
+            }
+        }
     }
 
     public void keyReleased(KeyEvent e) {
@@ -132,5 +201,68 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     public void keyTyped(KeyEvent e)
     {
         //we dont use typing i fear
+    }
+
+    public void pauseGame() {
+        isPaused = true;
+        showPauseMenu = true;
+
+        setPauseButtonsVisible(isPaused);
+
+        resumeButton.requestFocus();
+        repaint();
+    }
+
+    public void resumeGame() {
+        isPaused = false;
+        showPauseMenu = false;
+
+        setPauseButtonsVisible(false);
+
+        this.requestFocus(); // Ensure key input returns to game
+        repaint();
+    }
+
+    public void resetGame() {
+        isPaused = false;
+        showPauseMenu = false;
+
+        car.reset();
+        car.setCollisions(0);
+        startTime = (int) System.currentTimeMillis();
+
+        setPauseButtonsVisible(false);
+
+        this.requestFocus();
+        repaint();
+    }
+
+    private void setPauseButtonsVisible(boolean visible) {
+        resumeButton.setVisible(visible);
+        restartButton.setVisible(visible);
+        quitButton.setVisible(visible);
+        instructionsButton.setVisible(visible);
+        creditsButton.setVisible(visible);
+    }
+
+    private void drawCenteredString(Graphics2D g2, String text, int panelWidth, int y) {
+        //fontmetrics lets you get the width of the string in pixels
+        FontMetrics metrics = g2.getFontMetrics(g2.getFont());
+        int textWidth = metrics.stringWidth(text);
+        int x = (panelWidth - textWidth) / 2;
+        g2.drawString(text, x, y);
+    }
+
+    public String getInstructions() {
+        return "Use arrow keys or WASD to drive.\n" +
+            "Reach the checkpoint as fast as possible.\n" +
+            "Avoid going off-road — it increases your collision count.\n" +
+            "Press 'P' to pause/resume the game.";
+    }
+
+    public String getCredits() {
+        return "Project Pizza\n" +
+            "Created by Ethan and ArJo\n" +
+            "Featuring Java Swing, custom physics, and lots of pizza.";
     }
 }
