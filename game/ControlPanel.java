@@ -90,9 +90,8 @@ public class ControlPanel extends JPanel
     {
     	String instructions = game.getInstructions();
     	JOptionPane.showMessageDialog(this, instructions, "Game Rules", JOptionPane.PLAIN_MESSAGE);
-    
     }
-    ((JPanel)(game)).requestFocus();      
+    ((JPanel)game).requestFocus();      
   }
     
   }

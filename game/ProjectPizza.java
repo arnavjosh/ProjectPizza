@@ -1,12 +1,15 @@
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import java.awt.BorderLayout;
 
-public class ProjectPizza implements JavaArcade {
-  boolean isRunning;
-  GamePanel gamePanel;
-  GameStats display;
-  int points;
-  String highScore;
+public class ProjectPizza extends JPanel implements JavaArcade {
+  private boolean isRunning;
+  private GamePanel gamePanel;
+  private GameStats display;
+  private int points;
+  private String highScore;
+  private ControlPanel controlPanel;
+
 
   public ProjectPizza() {
     isRunning = true;
@@ -14,6 +17,7 @@ public class ProjectPizza implements JavaArcade {
     highScore = "0";
     gamePanel = new GamePanel(this);
     display = new GameStats(this);
+    controlPanel  = new ControlPanel(this, display);
 
     JFrame frame = new JFrame("Project Pizza");
 
@@ -21,6 +25,7 @@ public class ProjectPizza implements JavaArcade {
     frame.setLayout(new BorderLayout());
     frame.add(display, BorderLayout.NORTH);
     frame.add(gamePanel, BorderLayout.CENTER);
+    //frame.add(controlPanel, BorderLayout.SOUTH);
     frame.pack();
     frame.setLocationRelativeTo(null);
     frame.setVisible(true);
@@ -44,6 +49,10 @@ public class ProjectPizza implements JavaArcade {
     isRunning = false;
     display.gameOver(points);
     points = 0;
+  }
+
+  public GamePanel getGamePanel() {
+    return gamePanel;
   }
 
   public String getGameName() {

@@ -19,6 +19,7 @@ public class Level
     {
         roads = new ArrayList<>();
         collidables = new ArrayList<>();
+        backgroundObjects = new ArrayList<>();
         newX = GamePanel.dimX/2;
         newY = GamePanel.dimY/2 + roadLength/2;
     }
@@ -132,6 +133,12 @@ public class Level
     public void addHouse(int x,int y)
     {
         collidables.add(new House(x,y));
+        //backgroundObjects.add(new GraphicObject(x,y,"/images/HouseShadow.png"));
+    }
+    public void addCheckpointHouse(int x, int y)
+    {
+        addRoad(new RoadSegment(x,y,0,RoadSegment.Type.CHECKPOINT));
+        collidables.add(new House(x,y));
     }
     public void addTree(int x, int y)
     {
@@ -165,6 +172,12 @@ public class Level
     {
         for(Collidable object : collidables){
             object.draw(graphics);
+        }
+    }
+    public void drawBackgroundObjects(Graphics2D graphics)
+    {
+        for(GraphicObject backgroundObject : backgroundObjects){
+            backgroundObject.draw(graphics);
         }
     }
     public void addBackgroundObject(GraphicObject object)

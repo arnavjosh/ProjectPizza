@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 
-public abstract class GraphicObject
+public class GraphicObject
 {
     protected int x, y;
     private BufferedImage image;

@@ -1,7 +1,11 @@
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
 
 public class MapHandler
 {
@@ -10,13 +14,25 @@ public class MapHandler
     private ArrayList<Level> levels;
     private int currentLevelNum = 0;
     private Level currentLevel;
+    private BufferedImage grassTile;
 
     public MapHandler()
     {
         levels = new ArrayList<Level>();
         loadLevels();
         currentLevel = levels.get(currentLevelNum);
+        loadGrassTile();
     }
+    
+
+    private void loadGrassTile() {
+        try {
+            grassTile = ImageIO.read(getClass().getResource("/images/Grass.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void setLevel(int levelNum)
     {
@@ -143,14 +159,13 @@ public class MapHandler
 
 
         level0.addDominos(415, 500);
-        level0.addHouse(675, -252);
-        level0.addHouse(1000, -252);
+        level0.addHouse(675, -238);
+        level0.addCheckpointHouse(1000, -238); // This is the checkpoint house
         //subtract 450 from y for each level up
-        level0.addHouse(675, -702);
-        level0.addHouse(1000, -702);
-        level0.addHouse(675, -1152);
-        level0.addHouse(1000, -1152);
-
+        level0.addHouse(675, -688);
+        level0.addHouse(1000, -688);
+        level0.addHouse(675, -1136);
+        level0.addHouse(1000, -1136);
         level0.addTreeCluster(550,200);
         level0.addTreeCluster(785,438);
         level0.addTreeCluster(743,605);
@@ -170,6 +185,39 @@ public class MapHandler
     public void drawCollidables(Graphics2D gameGraphics)
     {
         currentLevel.drawCollidables(gameGraphics);
+    }
+
+    public void drawBackground(Graphics2D gameGraphics, Car car)
+    {
+        if (grassTile == null) return;
+
+        int tileW = grassTile.getWidth();
+        int tileH = grassTile.getHeight();
+
+        // Get current screen dimensions (in case user resized/fullscreened)
+        int screenW = GamePanel.dimX + 100;
+        int screenH = GamePanel.dimX + 100;
+
+        // Get top-left world coordinates based on car position
+        double worldLeft = car.getX() - screenW / 2.0;
+        double worldTop = car.getY() - screenH / 2.0;
+
+        // Align to nearest tile so tiles scroll smoothly
+        int startX = (int) (Math.floor(worldLeft / tileW) * tileW);
+        int startY = (int) (Math.floor(worldTop / tileH) * tileH);
+
+        int endX = (int) (worldLeft + screenW) + tileW;
+        int endY = (int) (worldTop + screenH) + tileH;
+
+        for (int x = startX; x < endX; x += tileW) {
+            for (int y = startY; y < endY; y += tileH) {
+                gameGraphics.drawImage(grassTile, x, y, null);
+            }
+        }
+
+
+
+        currentLevel.drawBackgroundObjects(gameGraphics);
     }
 
     public RoadSegment getSegmentAt(double x, double y)

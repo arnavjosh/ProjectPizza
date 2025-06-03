@@ -65,6 +65,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         pizza2d.translate(centerX, centerY);
         pizza2d.rotate(-car.getHeading());
         pizza2d.translate(-car.getX(),-car.getY());
+        mapHandler.drawBackground(pizza2d, car);
         mapHandler.drawRoads(pizza2d);
         Graphics2D carGraphics = (Graphics2D)pizzaGraphic.create();
         car.draw(carGraphics);

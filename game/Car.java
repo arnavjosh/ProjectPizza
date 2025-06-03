@@ -126,7 +126,7 @@ public class Car {
         x += dx * moveDistance;
         y += dy * moveDistance;
 
-        speed = -(Math.signum(speed))*(Math.max(Math.abs(speed*0.2), 0.5));
+        speed = -4*(Math.signum(speed))*(Math.max(Math.abs(speed*0.2), 0.5));
         velocityX = 0;
         velocityY = 0;
         steeringAngle = 0;
