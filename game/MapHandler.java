@@ -357,4 +357,7 @@ public class MapHandler
         }
         return 0;
     }
+    public int getCurrentLevelNum() {
+        return currentLevelNum;
+    }
 }

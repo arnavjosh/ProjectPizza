@@ -1,9 +1,12 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 //for ethan: i found this library that'll let us do the tranfroms
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener {
     private Timer timer;
@@ -21,12 +24,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     private int startTime;
     private int pauseStartTime = 0;
     private int totalPausedTime = 0;
+    private int effectiveElapsed = 0;
 
 
     private JButton instructionsButton, creditsButton;
     private boolean showPauseMenu = false;
     private boolean isPaused = false;
+    private boolean firstInput = false;
     private JButton resumeButton, restartButton, quitButton;
+
+    private double animationFrame = 0;
+    private boolean isAnimating = false;
 
     public GamePanel(ProjectPizza game) {
         this.game = game;
@@ -46,7 +54,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         //16 ms is 60 fps
         timer = new Timer(16, this);
         timer.start();
-        startTime = (int) System.currentTimeMillis();
 
         resumeButton = new JButton("Resume");
         restartButton = new JButton("Restart");
@@ -94,13 +101,50 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     {
         game.addPoints(1000/(int)((int)(System.currentTimeMillis() - startTime)/1000.0));
         mapHandler.incrementLevel();
-        startTime = (int) System.currentTimeMillis();
+        firstInput = false;
         totalPausedTime = 0;
         pauseStartTime = 0;
+        animationFrame = 0;
+        isAnimating = true;
+    }
+
+    public void levelEndScreen()
+    {
+        //jOptionPane for this
+        String info;
+        info = "Level " + mapHandler.getCurrentLevelNum() + " completed!\n";
+        info += "Time taken: " + effectiveElapsed/1000.0 + " seconds\n";
+        info += "Collisions: " + car.getCollisions() + "\n";
+        info += "Points earned: " + (1000/(int)((int)(System.currentTimeMillis() - startTime)/1000.0)) + "\n";
+        JOptionPane.showMessageDialog(this, info, "Level Completed", JOptionPane.INFORMATION_MESSAGE);
     }
 
     protected void paintComponent(Graphics pizzaGraphic)
     {
+        if(isAnimating) {
+            if ((int)animationFrame > 10) {
+                isAnimating = false;
+                firstInput = false;
+                levelEndScreen();
+            }
+            BufferedImage animationImage;
+            try {
+                animationImage = ImageIO.read(getClass().getResource("/Anmation/sprite_0" + ((int)animationFrame) + ".png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return; // If the image fails to load, just return
+            }
+            //draws animation but preserves the dimensions of the panel
+            pizzaGraphic.setColor(Color.BLACK);
+            pizzaGraphic.fillRect(0, 0, getWidth(), getHeight());
+            int imageWidth = animationImage.getWidth();
+            int imageHeight = animationImage.getHeight();
+            int x = (getWidth() - imageWidth) / 2;
+            int y = (getHeight() - imageHeight) / 2;
+            pizzaGraphic.drawImage(animationImage, x, y, imageWidth, imageHeight, null);
+            animationFrame+=0.2;
+            return; // Skip the rest of the painting if animating
+        }
         super.paintComponent(pizzaGraphic);
         dimX = getWidth();
         dimY = getHeight();
@@ -137,18 +181,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         pizza2d.dispose();
 
         carGraphics.dispose();
-        pizzaGraphic.setColor(Color.BLACK);
-        pizzaGraphic.setFont(new Font("Arial", Font.BOLD, 16));
+        pizzaGraphic.setColor(Color.YELLOW);
+        pizzaGraphic.setFont(new Font("Serif", Font.BOLD, 25));
         pizzaGraphic.drawString("Speed: " + ((int)(car.getSpeed()*100)/100.0), 20, 30);
 
         int currentTime = (int)System.currentTimeMillis();
         //sigma boy ternary
-        int effectiveElapsed = isPaused? pauseStartTime - startTime - totalPausedTime: currentTime - startTime - totalPausedTime;
+        effectiveElapsed = isPaused? pauseStartTime - startTime - totalPausedTime: currentTime - startTime - totalPausedTime;
 
-        pizzaGraphic.drawString("Time: " + (effectiveElapsed / 1000.0) + " seconds", 20, 50);
+        if(!firstInput)
+        {
+            effectiveElapsed = 0;
+        }
+
+        pizzaGraphic.drawString("Time: " + (effectiveElapsed / 1000.0) + " seconds", 20, 70);
 
 
-        pizzaGraphic.drawString("Collisions: " + car.getCollisions(), 20, 90);
+        pizzaGraphic.drawString("Collisions: " + car.getCollisions(), 20, 110);
         compass.draw((Graphics2D)pizzaGraphic.create(), car.getHeading() ,mapHandler.getCheckpointX(), mapHandler.getCheckpointY(),car.getX(), car.getY());
 
         //have to get rid of the graphics 2d according to stack
@@ -174,6 +223,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
     public void keyPressed(KeyEvent e)
     {
+        if(!firstInput) {
+            firstInput = true;
+            startTime = (int) System.currentTimeMillis();
+        }
         int code = e.getKeyCode();
         if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W)
             car.setAccelerating(true);

@@ -205,6 +205,10 @@ public class Car {
 
   public void nextLevel()
   {
+    accelerating = false;
+    turningLeft = false;
+    turningRight = false;
+    braking = false;
     speed = 0;
     velocityX = 0;
     velocityY = 0;
@@ -212,6 +216,7 @@ public class Car {
     x = GamePanel.dimX/2;
     y = GamePanel.dimY/2;
     panel.finishLevel();
+
   }
 
   public Path2D getBounds() {

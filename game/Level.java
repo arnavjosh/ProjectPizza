@@ -215,9 +215,7 @@ public class Level
     }
     public void addTreeCluster(int x, int y)
     {
-        addTree(x-30,y-20);
-        addTree(x+30,y);
-        addTree(x,y+40);
+        addTree(x,y);
     }
     public ArrayList<RoadSegment> getRoadSegments(){
         return roads;
