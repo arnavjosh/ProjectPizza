@@ -130,15 +130,44 @@ public class Level
     {
         collidables.add(object);
     }
-    public void addHouse(int x,int y)
+    public void addHouse(int x,int y, House.Orientation orientation)
     {
-        collidables.add(new House(x,y));
+        collidables.add(new House(x,y,orientation));
         //backgroundObjects.add(new GraphicObject(x,y,"/images/HouseShadow.png"));
     }
-    public void addCheckpoint(int x, int y)
+    public void addHouseNorth(int x, int y)
     {
+        addHouse(x,y, House.Orientation.NORTH);
+    }
+    public void addHouseSouth(int x, int y)
+    {
+        addHouse(x,y, House.Orientation.SOUTH);
+    }
+    public void addHouseEast(int x, int y)
+    {
+        addHouse(x,y, House.Orientation.EAST);
+    }
+    public void addHouseWest(int x, int y)
+    {
+        addHouse(x,y, House.Orientation.WEST);
+    }
+    public void addExplosion(int x, int y)
+    {
+        backgroundObjects.add(new GraphicObject(x,y,"/images/Explosion.png"));
+    }
+    public void addCheckpoint(int x, int y, House.Orientation orientation)
+    {
+        double rotation;
+        if(orientation == House.Orientation.EAST || orientation == House.Orientation.WEST)
+        {
+            rotation = Math.toRadians(90);
+        }
+        else
+        {
+            rotation = 0;
+        }
         addRoad(new RoadSegment(x,y,0,RoadSegment.Type.CHECKPOINT));
-        collidables.add(new House(x,y));
+        collidables.add(new House(x,y,orientation));
     }
     public void addTree(int x, int y)
     {

@@ -19,6 +19,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     public static int centerY = dimY / 2;
 
     private int startTime;
+    private int pauseStartTime = 0;
+    private int totalPausedTime = 0;
+
 
     private JButton instructionsButton, creditsButton;
     private boolean showPauseMenu = false;
@@ -92,6 +95,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         game.addPoints(1000/(int)((int)(System.currentTimeMillis() - startTime)/1000.0));
         mapHandler.incrementLevel();
         startTime = (int) System.currentTimeMillis();
+        totalPausedTime = 0;
+        pauseStartTime = 0;
     }
 
     protected void paintComponent(Graphics pizzaGraphic)
@@ -125,7 +130,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         if(!car.isOnRoad())
         {
             carGraphics.setColor(Color.YELLOW);
-            carGraphics.setStroke(new BasicStroke(15));
+            carGraphics.setStroke(new BasicStroke(25));
             carGraphics.drawRect(0, 0, dimX, dimY);
         }
 
@@ -135,7 +140,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         pizzaGraphic.setColor(Color.BLACK);
         pizzaGraphic.setFont(new Font("Arial", Font.BOLD, 16));
         pizzaGraphic.drawString("Speed: " + ((int)(car.getSpeed()*100)/100.0), 20, 30);
-        pizzaGraphic.drawString("Time: " + ((int)(System.currentTimeMillis() - startTime)/1000.0) + " seconds", 20, 50);
+
+        int currentTime = (int)System.currentTimeMillis();
+        //sigma boy ternary
+        int effectiveElapsed = isPaused? pauseStartTime - startTime - totalPausedTime: currentTime - startTime - totalPausedTime;
+
+        pizzaGraphic.drawString("Time: " + (effectiveElapsed / 1000.0) + " seconds", 20, 50);
+
+
         pizzaGraphic.drawString("Collisions: " + car.getCollisions(), 20, 90);
         compass.draw((Graphics2D)pizzaGraphic.create(), car.getHeading() ,mapHandler.getCheckpointX(), mapHandler.getCheckpointY(),car.getX(), car.getY());
 
@@ -207,9 +219,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         isPaused = true;
         showPauseMenu = true;
 
+
+        pauseStartTime = (int) System.currentTimeMillis();
+
         setPauseButtonsVisible(isPaused);
 
-        resumeButton.requestFocus();
         repaint();
     }
 
@@ -217,9 +231,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         isPaused = false;
         showPauseMenu = false;
 
+        totalPausedTime += System.currentTimeMillis() - pauseStartTime;
+
         setPauseButtonsVisible(false);
 
-        this.requestFocus(); // Ensure key input returns to game
+        //request focus back to the game panel (this mehtod is so cool)
+        this.requestFocus();
         repaint();
     }
 
@@ -230,6 +247,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         car.reset();
         car.setCollisions(0);
         startTime = (int) System.currentTimeMillis();
+        totalPausedTime = 0;
+        pauseStartTime = 0;
 
         setPauseButtonsVisible(false);
 
@@ -254,15 +273,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     }
 
     public String getInstructions() {
-        return "Use arrow keys or WASD to drive.\n" +
-            "Reach the checkpoint as fast as possible.\n" +
-            "Avoid going off-road — it increases your collision count.\n" +
-            "Press 'P' to pause/resume the game.";
+        return game.getInstructions();
     }
 
     public String getCredits() {
-        return "Project Pizza\n" +
-            "Created by Ethan and ArJo\n" +
-            "Featuring Java Swing, custom physics, and lots of pizza.";
+        return game.getCredits();
+    }
+
+    public boolean paused() {
+        return isPaused;
     }
 }

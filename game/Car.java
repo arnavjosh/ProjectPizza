@@ -139,45 +139,50 @@ public class Car {
         }
       }
     }
-
-    if (turningLeft) {
-      steeringAngle = Math.max(steeringAngle - steeringSpeed, -maxSteeringAngle);
-    } else if (turningRight) {
-      steeringAngle = Math.min(steeringAngle + steeringSpeed, maxSteeringAngle);
-    } else{
-      if(steeringAngle>0)
-        steeringAngle = Math.max(0,steeringAngle-steeringSpeed);
-      else if(steeringAngle<0)
-        steeringAngle = Math.min(0,steeringAngle+steeringSpeed);
-    }
-
-    if (accelerating) {
-      speed = Math.min(speed+acceleration, maxSpeed);
-    } else if (braking) {
-      speed = Math.max(speed-acceleration, -maxSpeed/2.0);
-    } else {
-      //hit song friction by band imagine dragons
-      speed*=friction;
-    }
-
-    if (speed!= 0 && Math.abs(steeringAngle) > 0.001)
+    
+    if(!panel.paused())
     {
-      //you can use sin to figure out the radius of the turn based on the angle you turn by
-      double turnRadius = wheelBase / Math.abs(Math.sin(steeringAngle));
-      double angularVelocity = speed/turnRadius;
-      headingRadians += angularVelocity * Math.signum(steeringAngle);
+
+      if (turningLeft) {
+        steeringAngle = Math.max(steeringAngle - steeringSpeed, -maxSteeringAngle);
+      } else if (turningRight) {
+        steeringAngle = Math.min(steeringAngle + steeringSpeed, maxSteeringAngle);
+      } else{
+        if(steeringAngle>0)
+          steeringAngle = Math.max(0,steeringAngle-steeringSpeed);
+        else if(steeringAngle<0)
+          steeringAngle = Math.min(0,steeringAngle+steeringSpeed);
+      }
+
+      if (accelerating) {
+        speed = Math.min(speed+acceleration, maxSpeed);
+      } else if (braking) {
+        speed = Math.max(speed-acceleration, -maxSpeed/2.0);
+      } else {
+        //hit song friction by band imagine dragons
+        speed*=friction;
+      }
+
+      if (speed!= 0 && Math.abs(steeringAngle) > 0.001)
+      {
+        //you can use sin to figure out the radius of the turn based on the angle you turn by
+        double turnRadius = wheelBase / Math.abs(Math.sin(steeringAngle));
+        double angularVelocity = speed/turnRadius;
+        headingRadians += angularVelocity * Math.signum(steeringAngle);
+      }
+
+      double desiredVelocityX = speed * Math.sin(headingRadians);
+      double desiredVelocityY = -speed * Math.cos(headingRadians);
+
+      //simulate sliding
+      velocityX = velocityX * driftFactor + desiredVelocityX * gripFactor;
+      velocityY = velocityY * driftFactor + desiredVelocityY * gripFactor;
+
+      // Apply velocity
+      x += velocityX;
+      y += velocityY;
+
     }
-
-    double desiredVelocityX = speed * Math.sin(headingRadians);
-    double desiredVelocityY = -speed * Math.cos(headingRadians);
-
-    //simulate sliding
-    velocityX = velocityX * driftFactor + desiredVelocityX * gripFactor;
-    velocityY = velocityY * driftFactor + desiredVelocityY * gripFactor;
-
-    // Apply velocity
-    x += velocityX;
-    y += velocityY;
 
 
     //handles slowing down car if not on road (changes speed sigma boy)

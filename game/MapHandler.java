@@ -4,7 +4,6 @@ import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
-
 import javax.imageio.ImageIO;
 
 public class MapHandler
@@ -92,8 +91,8 @@ public class MapHandler
 
         testLevel.addTree(700, 200);
         
-        testLevel.addHouse(650,-255);
-        testLevel.addHouse(995,-255);
+        testLevel.addHouseNorth(650,-255);
+        testLevel.addHouseNorth(995,-255); 
         testLevel.addRoad(new RoadSegment(600,-600,0,RoadSegment.Type.CHECKPOINT));
         testLevel.addDominos(-25, 84);
 
@@ -159,17 +158,106 @@ public class MapHandler
 
 
         level0.addDominos(415, 500);
-        level0.addHouse(675, -238);
-        level0.addCheckpoint(1000, -238); // This is the checkpoint house
+        level0.addHouseNorth(675, -238); // This is the starting house
+        level0.addCheckpoint(1000, -238,House.Orientation.NORTH); // This is the checkpoint house
         //subtract 450 from y for each level up
-        level0.addHouse(675, -688);
-        level0.addHouse(1000, -688);
-        level0.addHouse(675, -1136);
-        level0.addHouse(1000, -1136);
+        level0.addHouseNorth(675, -688);
+        level0.addHouseNorth(1000, -688);
+        level0.addHouseNorth(675, -1136);
+        level0.addHouseNorth(1000, -1136);
         level0.addTreeCluster(550,200);
         level0.addTreeCluster(785,438);
         level0.addTreeCluster(743,605);
         level0.addTreeCluster(581,800);
+        level0.addTreeCluster(260,266);
+        level0.addTreeCluster(257, 82);
+        level0.addTreeCluster(253, 160);
+        level0.addHouseEast(190,-180);
+        level0.addHouseEast(190,-530);
+        level0.addTreeCluster(213,-774);
+        level0.addHouseNorth(-109,-688);
+        level0.addTreeCluster(-601,-851);
+        level0.addTreeCluster(-553,-793);
+        level0.addTreeCluster(-396,-743);
+        level0.addTreeCluster(-625,-918);
+        level0.addBackgroundObject(new GraphicObject(554, -557, "/images/Explosion.png"));
+        level0.addHouseEast(-697,-1194);
+        level0.addHouseEast(-697,-1544);
+
+        level0.addTreeCluster(-658,-1758);
+        level0.addTreeCluster(-559,-1833);
+        level0.addTreeCluster(-491,-1907);
+        level0.addTreeCluster(-404,-1941);
+
+        level0.addHouseSouth(-155,-1993);
+        level0.addHouseSouth(200,-1993);
+        //tree
+        level0.addTreeCluster(450,-1993);
+        //more houses
+        level0.addHouseSouth(750,-1993);
+        level0.addHouseSouth(1100,-1993);
+        //TREES
+        level0.addTreeCluster(1315,-1935);
+        level0.addTreeCluster(1330,-1854);
+        level0.addTreeCluster(1421,-1787);
+        level0.addTreeCluster(1490,-1685);
+        level0.addTreeCluster(1451,-1694);
+
+
+        level0.addHouseWest(1488,-1427);
+        level0.addHouseWest(1488,-1077);
+        level0.addHouseWest(1488,-727);
+        level0.addHouseWest(1488,-377);
+        level0.addHouseWest(1488,-27);
+        //trees
+
+        level0.addTreeCluster(1307,142);
+        level0.addTreeCluster(1237,182);
+        level0.addTreeCluster(1112,201);
+        level0.addTreeCluster(1029,174);
+        level0.addTreeCluster(931,117);
+        level0.addTreeCluster(828,115);
+        level0.addTreeCluster(731,134);
+        level0.addTreeCluster(628,120);
+        level0.addTreeCluster(703,210);
+        level0.addTreeCluster(774,316);
+        level0.addTreeCluster(897,316);
+        level0.addTreeCluster(1009,297);
+        level0.addTreeCluster(1130,328);
+        level0.addTreeCluster(1268,271);
+        level0.addTreeCluster(1410,209);
+        level0.addTreeCluster(1546,189);
+        level0.addTreeCluster(1691,80);
+        level0.addTreeCluster(1689,-103);
+        level0.addTreeCluster(1673,-268);
+        level0.addTreeCluster(1664,-448);
+        level0.addTreeCluster(1780,-722);
+        level0.addTreeCluster(1710,-889);
+        level0.addTreeCluster(1702,-1134);
+        level0.addTreeCluster(1717,-1310);
+
+
+//adds explosion
+        level0.addExplosion(1159, -563);
+        level0.addExplosion(365, -32);
+        level0.addExplosion(470, 276);
+        level0.addExplosion(361, -51);
+        level0.addExplosion(-298, -831);
+        level0.addExplosion(-432, -961);
+        level0.addExplosion(-559, -1365);
+        level0.addExplosion(-542, -1691);
+        level0.addExplosion(1340, -332);
+        level0.addExplosion(1354, -899);
+        level0.addExplosion(1223, -1243);
+        level0.addExplosion(685, -1486);
+        level0.addExplosion(297, -1661);
+        level0.addExplosion(440, -1852);
+        level0.addExplosion(-334, -1818);
+        level0.addExplosion(-296, -1679);
+        level0.addExplosion(-486, -970);
+        level0.addExplosion(-304, -866);
+
+        level0.addBackgroundObject(new GraphicObject(100, 100, "/images/Crater.png"));
         levels.add(level0);
     }
     public void draw(Graphics2D gameGraphics)
