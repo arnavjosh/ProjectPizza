@@ -106,7 +106,7 @@ public class Car {
       }
     }
     */
-
+    
     for(Collidable collidable : mapHandler.getCurrentCollidables())
     {
       if(getBounds().intersects(collidable.getCollisionBox()))
@@ -115,7 +115,7 @@ public class Car {
         double dx = x - collidable.getCollisionBox().getCenterX();
         double dy = y - collidable.getCollisionBox().getCenterY();
         double distance = Math.sqrt(dx * dx + dy * dy);
-        double moveDistance = 1; // Distance to move away from the collidable
+        double moveDistance = 4; // Distance to move away from the collidable
         if (distance > 0) {
           dx /= distance;
           dy /= distance;
@@ -126,7 +126,7 @@ public class Car {
         x += dx * moveDistance;
         y += dy * moveDistance;
 
-        speed = -4*(Math.signum(speed))*(Math.max(Math.abs(speed*0.2), 0.5));
+        speed = -1*(Math.signum(speed))*(Math.max(Math.abs(speed*0.2), 0.5));
         velocityX = 0;
         velocityY = 0;
         steeringAngle = 0;
@@ -139,6 +139,7 @@ public class Car {
         }
       }
     }
+      
     
     if(!panel.paused())
     {

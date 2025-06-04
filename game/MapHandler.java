@@ -256,7 +256,19 @@ public class MapHandler
         level0.addExplosion(-296, -1679);
         level0.addExplosion(-486, -970);
         level0.addExplosion(-304, -866);
-
+        level0.addExplosion(840, 227);
+        level0.addExplosion(1105, 134);
+        level0.addExplosion(1211, -1105);
+        level0.addExplosion(192, -1328);
+        level0.addExplosion(32, -1065);
+        level0.addExplosion(-732, -1244);
+        level0.addExplosion(-823, -1502);
+        level0.addExplosion(-771, -1807);
+        level0.addExplosion(-633, -2051);
+        level0.addExplosion(249, -395);
+        level0.addExplosion(172, 289);
+        level0.addExplosion(180, 524);
+        level0.addExplosion(301, 744);
         level0.addBackgroundObject(new GraphicObject(100, 100, "/images/Crater.png"));
         levels.add(level0);
     }
