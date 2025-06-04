@@ -217,6 +217,10 @@ public class Level
     {
         addTree(x,y);
     }
+    public void addCactus(int x, int y)
+    {
+        collidables.add(new Cactus(x,y));
+    }
     public ArrayList<RoadSegment> getRoadSegments(){
         return roads;
     }

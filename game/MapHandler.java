@@ -25,8 +25,21 @@ public class MapHandler
     
 
     private void loadGrassTile() {
+        String grassTilePath;
+        switch(currentLevelNum)
+        {
+            case 0:
+                grassTilePath = "/images/Grass.png";
+                break;
+            case 1:
+                grassTilePath = "/images/Sand.png";
+                break;
+            default:
+                grassTilePath = "/images/Grass.png"; // Default to first tile
+                break;
+        }
         try {
-            grassTile = ImageIO.read(getClass().getResource("/images/Grass.png"));
+            grassTile = ImageIO.read(getClass().getResource(grassTilePath));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -271,6 +284,91 @@ public class MapHandler
         level0.addExplosion(301, 744);
         level0.addBackgroundObject(new GraphicObject(100, 100, "/images/Crater.png"));
         levels.add(level0);
+
+        Level level1 = new Level();
+        level1.addDominos(415, 500);
+        //grid of roads, no comments on lines
+        level1.addUp(5);
+        level1.addUpRight();
+        level1.addRight(5);        
+        level1.addRightDown();    
+        level1.addDown(2);
+        level1.addDownLeft();     
+        level1.addLeft(5);      
+        level1.addLeftUp();      
+        level1.addUp(5);     
+        level1.addUpRight();   
+        level1.addRight(5);    
+        level1.addRightDown();  
+        level1.addDown(2);        
+        level1.addDownLeft();      
+        level1.addLeft(5);
+        //ADDS GRID on other side
+        level1.addLeftUp();        
+        level1.addUp(5);        
+        level1.addUpRight();
+        level1.addRight(5);
+        level1.addRightDown();
+        level1.addDown(2);
+        level1.addDownLeft();
+        level1.addLeft(5);
+        level1.addLeftUp();      
+        level1.addUp(5);
+        level1.addUpRight();  
+        level1.addRight(5);       
+        level1.addRightDown();     
+        level1.addDown(2);
+        level1.addDownLeft();
+        level1.addLeft(10);
+        level1.addLeftDown();
+        level1.addDown(2);
+        level1.addDownRight();
+        level1.addRight(5);
+        level1.addRightDown();
+        level1.addDown(2);
+        level1.addDownLeft();
+        level1.addLeft(5);
+        level1.addLeftUp();
+        level1.addUp(2);
+        level1.addUpRight();
+        level1.addRight(5);
+        level1.addRightDown();
+        level1.addDown(2);
+        level1.addDownLeft();
+        level1.addLeft(5);
+        level1.addLeftDown();
+        level1.addDown(2);
+        level1.addDownRight();
+        level1.addRight(5);
+        level1.addCactus(541, 303);
+        level1.addCactus(585, 213);
+        level1.addCactus(559, 139);
+        level1.addCactus(276, 107);
+        level1.addCactus(268, 290);
+        level1.addCactus(240, 200);
+
+        level1.addHouseNorth(44,201);
+        level1.addHouseSouth(29,-255);
+        level1.addHouseEast(-622,-178);
+        level1.addHouseEast(-622,-598);
+        level1.addHouseEast(-622,-1018);
+        level1.addHouseSouth(-147,-1558);
+        level1.addHouseSouth(950,-1558);
+        level1.addHouseEast(181,-1638);
+        level1.addHouseSouth(583,-2008);
+        level1.addHouseSouth(1100,-2008);
+        level1.addCheckpoint(1510,-1548, House.Orientation.WEST);
+        level1.addHouseWest(1510,-1048);
+        level1.addHouseWest(1510,-548);
+        level1.addHouseWest(1510,-48);
+        level1.addHouseNorth(654,-1092);
+        level1.addHouseSouth(893,-686);
+        level1.addHouseNorth(636,-211);
+
+
+
+
+        levels.add(level1);
     }
     public void draw(Graphics2D gameGraphics)
     {
@@ -345,6 +443,7 @@ public class MapHandler
         //loops level using mod
         currentLevelNum = (currentLevelNum+1)%levels.size();
         currentLevel = levels.get(currentLevelNum);
+        loadGrassTile();
     }
 
     public double getCheckpointX()

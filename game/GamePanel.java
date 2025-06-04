@@ -3,8 +3,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-//for ethan: i found this library that'll let us do the tranfroms
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -126,6 +124,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
                 isAnimating = false;
                 firstInput = false;
                 levelEndScreen();
+                return;
             }
             BufferedImage animationImage;
             try {
