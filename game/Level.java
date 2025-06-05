@@ -159,6 +159,18 @@ public class Level {
     collidables.add(new House(x, y, orientation));
   }
 
+  public void addTurnBased(int x, int y, House.Orientation orientation) {
+    double rotation;
+    if (orientation == House.Orientation.EAST || orientation == House.Orientation.WEST) {
+      rotation = Math.toRadians(90);
+    } else {
+      rotation = 0;
+    }
+    addRoad(new RoadSegment(x, y, 0, RoadSegment.Type.TURNBASEDTEST));
+    collidables.add(new House(x, y, orientation));
+
+  }
+
   public void addTree(int x, int y) {
     collidables.add(new Tree(x, y));
   }
