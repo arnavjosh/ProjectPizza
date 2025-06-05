@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 //this class is lowkey straightforward for now
@@ -159,15 +160,15 @@ public class Level {
     collidables.add(new House(x, y, orientation));
   }
 
-  public void addTurnBased(int x, int y, House.Orientation orientation) {
+  public void addTurnBased(int x, int y, RoadMob.Orientation orientation) {
     double rotation;
-    if (orientation == House.Orientation.EAST || orientation == House.Orientation.WEST) {
+    if (orientation == RoadMob.Orientation.EAST || orientation == RoadMob.Orientation.WEST) {
       rotation = Math.toRadians(90);
     } else {
       rotation = 0;
     }
     addRoad(new RoadSegment(x, y, 0, RoadSegment.Type.TURNBASEDTEST));
-    collidables.add(new House(x, y, orientation));
+    collidables.add(new RoadMob(x, y, orientation));
 
   }
 

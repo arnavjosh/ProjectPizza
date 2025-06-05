@@ -58,7 +58,7 @@ public class RoadSegment {
         int width = 360;
         return new Rectangle2D.Double(-width / 2.0, -length / 2.0, width, length);
       case TURNBASEDTEST:
-        return new Rectangle2D.Double(-360 / 2.0, -260 / 2.0, 360, 260);
+        return new Rectangle2D.Double(-100 / 2.0, -60 / 2.0, 100, 60);
     }
     return null;
   }
