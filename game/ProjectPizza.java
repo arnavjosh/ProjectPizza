@@ -48,7 +48,9 @@ public class ProjectPizza extends JPanel implements JavaArcade {
   public void stopGame() {
     isRunning = false;
     display.gameOver(points);
+    gamePanel.resetGame();
     points = 0;
+    display.update(points);
   }
 
   public GamePanel getGamePanel() {
@@ -83,7 +85,12 @@ public class ProjectPizza extends JPanel implements JavaArcade {
   }
 
   public String getInstructions() {
-    return "figure it out its not that hard";
+    return "Instructions:\n" +
+           "1. Use arrow keys to control the pizza delivery car.\n" +
+           "2. Follow the yellow needle to get to the recipient house.\n" +
+           "3. Avoid obstacles and manage your time.\n" +
+           "4. Earn points for successful deliveries.\n" +
+           "5. Try to beat your high score!";
   }
 
   public String getCredits() {

@@ -100,10 +100,10 @@ public class Car {
           panel.startTurnBased();
         }
         numCollisions++;
-        if (numCollisions >= 100) {
+        if (numCollisions >= 10) {
           // if you hit too many times, reset the car
           reset();
-          numCollisions = 0;
+          panel.gameOver();
         }
 
       }

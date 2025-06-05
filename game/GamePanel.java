@@ -2,10 +2,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 public class GamePanel extends JPanel implements ActionListener, KeyListener {
   private Timer timer;
   private MapHandler mapHandler;
@@ -15,20 +13,22 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
   public static int dimX = 800;
   public static int dimY = 600;
+  public int centerX = dimX / 2;
+  public int centerY = dimY / 2;
 
-  public static int centerX = dimX / 2;
-  public static int centerY = dimY / 2;
+  private long startTime;
+  private long pauseStartTime = 0;
+  private long totalPausedTime = 0;
+  private long effectiveElapsed = 0;
 
-  private int startTime;
-  private int pauseStartTime = 0;
-  private int totalPausedTime = 0;
-  private int effectiveElapsed = 0;
+  private int gainedPoints = 0;
 
-  private JButton instructionsButton, creditsButton;
   private boolean showPauseMenu = false;
   private boolean isPaused = false;
   private boolean firstInput = false;
   private JButton resumeButton, restartButton, quitButton;
+  private JButton instructionsButton, creditsButton;
+  private JButton pauseButton;
 
   private double animationFrame = 0;
   private boolean isAnimating = false;
@@ -54,13 +54,26 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     timer = new Timer(16, this);
     timer.start();
 
+    pauseButton = new JButton("Pause Menu");
     resumeButton = new JButton("Resume");
     restartButton = new JButton("Restart");
     quitButton = new JButton("Quit");
+    instructionsButton = new JButton("Instructions");
+    creditsButton = new JButton("Credits");
+    instructionsButton.addActionListener(
+        e -> JOptionPane.showMessageDialog(this, getInstructions(), "Instructions", JOptionPane.INFORMATION_MESSAGE));
+    creditsButton.addActionListener(
+        e -> JOptionPane.showMessageDialog(this, getCredits(), "Credits", JOptionPane.INFORMATION_MESSAGE));
+    pauseButton.addActionListener(e -> pauseGame());
 
     resumeButton.setBounds(centerX - 75, centerY - 60, 150, 40);
     restartButton.setBounds(centerX - 75, centerY, 150, 40);
     quitButton.setBounds(centerX - 75, centerY + 60, 150, 40);
+    instructionsButton.setBounds(centerX - 75, centerY + 120, 150, 40);
+    creditsButton.setBounds(centerX - 75, centerY + 180, 150, 40);
+
+    //bottom corner
+    pauseButton.setBounds(dimX - 150, dimY - 100, 140, 40);
 
     resumeButton.addActionListener(e -> resumeGame());
     restartButton.addActionListener(e -> resetGame());
@@ -69,39 +82,29 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     resumeButton.setVisible(false);
     restartButton.setVisible(false);
     quitButton.setVisible(false);
+    instructionsButton.setVisible(false);
+    creditsButton.setVisible(false);
+    pauseButton.setVisible(true);
 
     // Absolute positioning
     setLayout(null);
     add(resumeButton);
     add(restartButton);
     add(quitButton);
-
-    instructionsButton = new JButton("Instructions");
-    creditsButton = new JButton("Credits");
-
-    instructionsButton.setBounds(centerX - 75, centerY + 120, 150, 40);
-    creditsButton.setBounds(centerX - 75, centerY + 180, 150, 40);
-
-    instructionsButton.addActionListener(
-        e -> JOptionPane.showMessageDialog(this, getInstructions(), "Instructions", JOptionPane.INFORMATION_MESSAGE));
-
-    creditsButton.addActionListener(
-        e -> JOptionPane.showMessageDialog(this, getCredits(), "Credits", JOptionPane.INFORMATION_MESSAGE));
-
-    instructionsButton.setVisible(false);
-    creditsButton.setVisible(false);
-
     add(instructionsButton);
     add(creditsButton);
-
+    add(pauseButton);
   }
 
   public void finishLevel() {
-    game.addPoints(1000 / (int) ((int) (effectiveElapsed) / 1000.0));
+    gainedPoints = (int)effectiveElapsed;
+    game.addPoints(gainedPoints);
     mapHandler.incrementLevel();
+
     firstInput = false;
     totalPausedTime = 0;
     pauseStartTime = 0;
+
     animationFrame = 0;
     isAnimating = true;
   }
@@ -112,11 +115,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     info = "Level " + mapHandler.getCurrentLevelNum() + " completed!\n";
     info += "Time taken: " + effectiveElapsed / 1000.0 + " seconds\n";
     info += "Collisions: " + car.getCollisions() + "\n";
-    info += "Points earned: " + (1000 / (int) ((int) (effectiveElapsed) / 1000.0)) + "\n";
+    info += "Points earned: " + gainedPoints + "\n";
     JOptionPane.showMessageDialog(this, info, "Level Completed", JOptionPane.INFORMATION_MESSAGE);
   }
 
-  protected void paintComponent(Graphics pizzaGraphic) {
+  private void animate(Graphics pizzaGraphic)
+  {
     if (isAnimating) {
       if ((int) animationFrame > 10) {
         isAnimating = false;
@@ -124,6 +128,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         levelEndScreen();
         return;
       }
+
+      //gets the image of the animation
       BufferedImage animationImage;
       try {
         animationImage = ImageIO.read(getClass().getResource("/Anmation/sprite_0" + ((int) animationFrame) + ".png"));
@@ -131,27 +137,45 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         e.printStackTrace();
         return; // If the image fails to load, just return
       }
+
       // draws animation but preserves the dimensions of the panel
       pizzaGraphic.setColor(Color.BLACK);
       pizzaGraphic.fillRect(0, 0, getWidth(), getHeight());
+
       int imageWidth = animationImage.getWidth();
       int imageHeight = animationImage.getHeight();
       int x = (getWidth() - imageWidth) / 2;
       int y = (getHeight() - imageHeight) / 2;
+
       pizzaGraphic.drawImage(animationImage, x, y, imageWidth, imageHeight, null);
       animationFrame += 0.2;
       return; // Skip the rest of the painting if animating
     }
+  }
+
+  protected void paintComponent(Graphics pizzaGraphic) {
     super.paintComponent(pizzaGraphic);
+    if(isAnimating)
+    {
+        animate(pizzaGraphic);
+        return;
+    }
+
+    //updates dimension values
     dimX = getWidth();
     dimY = getHeight();
     centerX = dimX / 2;
     centerY = dimY / 2;
+
+    //updates buttonlocations
     resumeButton.setBounds(centerX - 75, centerY - 60, 150, 40);
     restartButton.setBounds(centerX - 75, centerY, 150, 40);
     quitButton.setBounds(centerX - 75, centerY + 60, 150, 40);
     instructionsButton.setBounds(centerX - 75, centerY + 120, 150, 40);
     creditsButton.setBounds(centerX - 75, centerY + 180, 150, 40);
+
+    pauseButton.setBounds(dimX - 150, dimY - 100, 140, 40);
+
     pizzaGraphic.setColor(Color.GREEN);
     pizzaGraphic.fillRect(0, 0, getWidth(), getHeight());
     // casts a copy of the graphic to a graphic 2d which lets us transform it with
@@ -276,11 +300,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     // we dont use typing i fear
   }
 
-  public void pauseGame() {
+  public void pauseTime()
+  {
     isPaused = true;
-    showPauseMenu = true;
+    pauseStartTime = System.currentTimeMillis();
+  }
 
-    pauseStartTime = (int) System.currentTimeMillis();
+  public void resumeTime()
+  {
+    isPaused = false;
+    totalPausedTime += System.currentTimeMillis() - pauseStartTime;
+    pauseStartTime = 0;
+  }
+
+  public void pauseGame() {
+    pauseTime();
+
+    showPauseMenu = true;
 
     setPauseButtonsVisible(isPaused);
 
@@ -288,13 +324,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
   }
 
   public void resumeGame() {
-    isPaused = false;
     showPauseMenu = false;
 
-    totalPausedTime += System.currentTimeMillis() - pauseStartTime;
+    resumeTime();
 
     setPauseButtonsVisible(false);
-
+    
     // request focus back to the game panel (this mehtod is so cool)
     this.requestFocus();
     repaint();
@@ -304,11 +339,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     isPaused = false;
     showPauseMenu = false;
 
+    gainedPoints = 0;
+
     car.reset();
     car.setCollisions(0);
     startTime = (int) System.currentTimeMillis();
     totalPausedTime = 0;
     pauseStartTime = 0;
+    effectiveElapsed = 0;
+    firstInput = false;
+    mapHandler.setLevel(0);
 
     setPauseButtonsVisible(false);
 
@@ -322,6 +362,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     quitButton.setVisible(visible);
     instructionsButton.setVisible(visible);
     creditsButton.setVisible(visible);
+    pauseButton.setVisible(!visible);
   }
 
   private void drawCenteredString(Graphics2D g2, String text, int panelWidth, int y) {
@@ -342,5 +383,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
   public boolean paused() {
     return isPaused;
+  }
+
+
+
+  public void gameOver()
+  {
+    String message = "Game Over! You scored " + game.getPoints() + " points.";
+    JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.INFORMATION_MESSAGE);
+    game.stopGame();
+    repaint();
   }
 }
