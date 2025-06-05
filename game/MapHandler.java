@@ -50,8 +50,7 @@ public class MapHandler {
     }
   }
 
-  private void loadLevels()
-  {
+  private void loadLevels() {
     System.out.println(levels);
     Level level0 = new Level();
     level0.addUp(5);
@@ -66,7 +65,7 @@ public class MapHandler {
     level0.addUpRight();
     level0.addRight(5);
     level0.addRightDown();
-    level0.addDown(2); 
+    level0.addDown(2);
     level0.addDownLeft();
     level0.addLeft(5);
     level0.addLeftUp();
@@ -90,15 +89,15 @@ public class MapHandler {
     level0.addUpRight();
     level0.addRight(5);
     level0.addRightDown();
-    level0.addDown(2); 
+    level0.addDown(2);
     level0.addDownLeft();
-    level0.addLeft(5); 
+    level0.addLeft(5);
     level0.addLeftUp();
 
     level0.addDominos(415, 500);
     level0.addHouseNorth(675, -238); // This is the starting house
     level0.addCheckpoint(1000, -238, House.Orientation.NORTH); // This is the checkpoint house
-    level0.addTurnBased(500, -1700, RoadMob.Orientation.NORTH);// for testing this is the second time im writing tehsnit
+    level0.addTurnBased(500, -2000, RoadMob.Orientation.NORTH);// for testing this is the second time im writing tehsnit
     // subtract 450 from y for each level up
     level0.addHouseNorth(675, -688);
     level0.addHouseNorth(1000, -688);
