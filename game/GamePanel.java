@@ -218,6 +218,19 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         }
     }
 
+    public void StartTurnBased() {
+      finishLevel();
+      isAnimating = false;
+
+      JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+
+      TurnBasedBattler battlerPanel = new TurnBasedBattler(new Lihaar(100), new Rat(50));
+
+      frame.setContentPane(battlerPanel);
+      frame.revalidate();
+      frame.repaint();
+    }
+
     public void actionPerformed(ActionEvent e)
     {
         //car.update(map);
