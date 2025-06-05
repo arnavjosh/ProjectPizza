@@ -18,6 +18,11 @@ public abstract class Collidable extends GraphicObject {
     collisionBox = createCollisionBox();
   }
 
+  public Collidable(int x, int y, double width, double height) {
+    super(x, y, (int) width, (int) height,null);
+    collisionBox = createCollisionBox();
+  }
+
   public abstract Rectangle2D.Double createCollisionBox();
 
   public void draw(Graphics2D g) {
