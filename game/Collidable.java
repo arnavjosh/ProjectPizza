@@ -27,14 +27,13 @@ public abstract class Collidable extends GraphicObject {
 
   public void draw(Graphics2D g) {
     if (getImage() == null)
-        return;
-    if(width == 0 || height == 0) {
+      return;
+    if (width == 0 || height == 0) {
       // no imageobserver so we pass in null for that
       g.drawImage(getImage(), x - getImage().getWidth() / 2, y - getImage().getHeight() / 2, getImage().getWidth(),
           getImage().getHeight(), null);
-    }
-    else{
-        g.drawImage(getImage(), x - width / 2, y - height / 2, width, height, null);
+    } else {
+      g.drawImage(getImage(), x - width / 2, y - height / 2, width, height, null);
     }
   }
 

@@ -58,9 +58,9 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
   }
 
   public void paintComponent(Graphics g) {
-    super.paintComponent(g); // it clears the screen
-    mc.draw(g, getWidth(), getHeight());
-    enemy.draw(g, getWidth(), getHeight());
+    super.paintComponent((Graphics2D) g); // it clears the screen
+    mc.draw((Graphics2D) g, getWidth(), getHeight());
+    enemy.draw((Graphics2D) g, getWidth(), getHeight());
   }
 
   @Override

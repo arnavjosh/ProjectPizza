@@ -1,14 +1,33 @@
 import java.awt.*;
+import javax.imageio.ImageIO;
+import java.io.IOException;
 
 public class Lihaar extends Mob {
+  private String[] paths = {
+      "/images/deliverymanturnbased.png",
+  };
+
   public Lihaar(int hp) {
     name = "Lihaar";
     this.hp = hp;
+
+    try {
+      image = ImageIO.read(getClass().getResource(paths[0]));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
-  public void draw(Graphics g, int pwidth, int pheight) {
-    g.setColor(Color.BLACK);
-    g.fillOval((int) (pwidth * .15), (int) (pheight * .6), 60, 120);
+  public void draw(Graphics2D g, int panelWidth, int panelHeight) {
+    if (image == null)
+      return;
+
+    int drawWidth = panelWidth / 2;
+    int drawHeight = panelHeight / 2;
+    int drawX = (panelWidth - drawWidth) / 2;
+    int drawY = (panelHeight - drawHeight) / 2;
+
+    g.drawImage(image, (int) (panelWidth * .15), (int) (panelHeight * .65), panelWidth / 6, panelHeight / 6, null);
   }
 
   public Ability[] getMobAbilities() {
