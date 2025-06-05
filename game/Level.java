@@ -173,6 +173,10 @@ public class Level
     {
         collidables.add(new Tree(x,y));
     }
+    public void addPlant(int x, int y)
+    {
+        backgroundObjects.add(new GraphicObject(x,y,60,60,"/images/Plant.png"));
+    }
     public void addDominos(int x, int y)
     {
         collidables.add(new Dominos(x,y));

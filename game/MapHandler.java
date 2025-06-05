@@ -364,6 +364,54 @@ public class MapHandler
         level1.addHouseNorth(654,-1092);
         level1.addHouseSouth(893,-686);
         level1.addHouseNorth(636,-211);
+        level1.addPlant(776, 262);
+        level1.addPlant(948, 259);
+        level1.addPlant(1083, 206);
+        level1.addPlant(1275, 143);
+        level1.addPlant(1357, -235);
+        level1.addPlant(1514, -351);
+        level1.addPlant(1618, -367);
+        level1.addPlant(1705, -557);
+        level1.addPlant(1609, -805);
+        level1.addPlant(1445, -836);
+        level1.addPlant(1020, -1009);
+        level1.addPlant(892, -1122);
+        level1.addPlant(815, -1237);
+        level1.addPlant(668, -1445);
+        level1.addPlant(587, -1683);
+        level1.addPlant(322, -1443);
+        level1.addPlant(107, -1426);
+        level1.addPlant(110, -1136);
+
+        level1.addPlant(288, -1130);
+        level1.addPlant(-75, -999);
+        level1.addPlant(-142, -752);
+        level1.addPlant(28, -708);
+        level1.addPlant(189, -637);
+        level1.addPlant(275, -354);
+        level1.addPlant(1297, -1888);
+        level1.addPlant(1436, -1835);
+
+        level1.addPlant(847, -1982);
+        level1.addPlant(667, -2225);
+        level1.addPlant(393, -2163);
+        level1.addPlant(341, -1890);
+        level1.addPlant(-311, -1389);
+        level1.addPlant(-581, -1613);
+        level1.addPlant(-663, -1475);
+        level1.addPlant(-545, -1288);
+        level1.addPlant(-455, -1022);
+        level1.addPlant(-475, -865);
+        level1.addPlant(-462, -703);
+        level1.addPlant(-461, -551);
+        level1.addPlant(-472, -380);
+        level1.addPlant(-459, -188);
+        level1.addPlant(-450, -55);
+
+        level1.addPlant(-331, 124);
+        level1.addPlant(-198, 152);
+        level1.addPlant(-146, 434);
+        level1.addPlant(95, 440);
 
 
 

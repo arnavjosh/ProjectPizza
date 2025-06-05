@@ -7,9 +7,15 @@ public class House extends Collidable {
     public enum Orientation {
         NORTH, SOUTH, EAST, WEST
     }
+    private String[] paths = {
+        "/images/House1.png",
+        "/images/House2.png"
+    };
+    private int randomIndex = (int) (Math.random() * paths.length);
 
     public House(int x, int y, Orientation orientation) {
-        super(x, y, "/images/House.png");
+        super(x, y);
+        setPath(paths[randomIndex]);
         this.orientation = orientation;
         collisionBox = createCollisionBox();
     }

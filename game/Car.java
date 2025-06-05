@@ -74,39 +74,6 @@ public class Car {
 
     centerX = GamePanel.dimX / 2;
     centerY = GamePanel.dimY / 2;
-    /*
-    //gets all of the corners
-    ArrayList<Point2D> cornersAndMidsections = new ArrayList<>();
-    cornersAndMidsections.add(new Point2D.Double(x - carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians),y-carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians))); //top left
-    cornersAndMidsections.add(new Point2D.Double(x + carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians),y+carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians))); //top right
-    cornersAndMidsections.add(new Point2D.Double(x - carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians),y-carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians))); //bottom left
-    cornersAndMidsections.add(new Point2D.Double(x + carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians),y+carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians))); //bottom right
-
-    int timesToSplit = 2;
-
-    for(int i = 0; i < timesToSplit; i++)
-    {
-      int sizeBefore = cornersAndMidsections.size();
-      for(int j = 0; j < sizeBefore; j++)
-      {
-        Point2D p1 = cornersAndMidsections.get(j);
-        Point2D p2 = cornersAndMidsections.get((j+1)%cornersAndMidsections.size());
-        cornersAndMidsections.add((j+1)%cornersAndMidsections.size(),getMidpoint(p1, p2));
-      }
-    }
-
-
-    for (Point2D point : cornersAndMidsections) {
-      if (mapHandler.isColliding(point)) {
-        //reverses movement
-        x -= speed * Math.sin(headingRadians);
-        y += speed * Math.cos(headingRadians);
-        speed = -1*(Math.signum(speed))*(Math.min(Math.abs(speed*0.2), 0.2));
-        steeringAngle = 0;
-      }
-    }
-    */
-    
     for(Collidable collidable : mapHandler.getCurrentCollidables())
     {
       if(getBounds().intersects(collidable.getCollisionBox()))
@@ -206,16 +173,7 @@ public class Car {
 
   public void nextLevel()
   {
-    accelerating = false;
-    turningLeft = false;
-    turningRight = false;
-    braking = false;
-    speed = 0;
-    velocityX = 0;
-    velocityY = 0;
-    headingRadians = 0;
-    x = GamePanel.dimX/2;
-    y = GamePanel.dimY/2;
+    reset();
     panel.finishLevel();
 
   }

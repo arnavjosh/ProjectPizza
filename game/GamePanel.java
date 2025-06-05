@@ -193,6 +193,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
             effectiveElapsed = 0;
         }
 
+        //prints the dimensions of the screen
+        pizzaGraphic.drawString("Dimensions: " + dimX + "x" + dimY, 20, 50);
+        System.out.println("Dimensions: " + dimX + "x" + dimY);
+
+
         pizzaGraphic.drawString("Time: " + (effectiveElapsed / 1000.0) + " seconds", 20, 70);
 
 
