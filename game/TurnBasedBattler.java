@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class TurnBasedBattler extends JPanel implements ActionListener { // worry about keylistener if wanted later
   Mob mc;
@@ -8,9 +11,29 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
   int buttonHeight = 120;
   int bottomMargin = 0; // if we want a gap between bottom of button and bottom of frame
   private JButton[] abilityButtons = new JButton[4];
+  private BufferedImage tile;
+
+  private void loadTile() {
+    String tilePath;
+    switch (MapHandler.getCurrentLevelNum()) {
+      case 0:
+        tilePath = "/images/Grass.png";
+        break;
+      case 1:
+        tilePath = "/images/Sand.png";
+        break;
+      default:
+        tilePath = "/images/Grass.png"; // Default to first tile
+        break;
+    }
+    try {
+      tile = ImageIO.read(getClass().getResource(tilePath));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
   public TurnBasedBattler(Mob mc, Mob enemy) {
-
     setLayout(null); // disables auto layout so you giet more control?
     // addKeyListener(this);
 
@@ -20,6 +43,8 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
     this.enemy = enemy;
 
     int numButtons = abilityButtons.length;
+
+    loadTile();
 
     // ability attacks in mc.getheroabilities
     for (int i = 0; i < mc.getMobAbilities().length; i++) {
@@ -58,9 +83,20 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
   }
 
   public void paintComponent(Graphics g) {
-    super.paintComponent((Graphics2D) g); // it clears the screen
-    mc.draw((Graphics2D) g, getWidth(), getHeight());
-    enemy.draw((Graphics2D) g, getWidth(), getHeight());
+    super.paintComponent(g); // it clears the screen
+
+    // draw background
+    if (tile == null) {
+      return;
+    }
+    for (int x = 0; x < this.getWidth(); x += tile.getWidth()) {
+      for (int y = 0; y < this.getHeight(); y += tile.getHeight()) {
+        ((Graphics2D) g).drawImage(tile, x, y, null);
+      }
+    }
+
+    mc.draw((Graphics2D) g, this.getWidth(), this.getHeight());
+    enemy.draw((Graphics2D) g, this.getWidth(), this.getHeight());
   }
 
   @Override

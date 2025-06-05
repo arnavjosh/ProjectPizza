@@ -10,7 +10,7 @@ public class MapHandler {
   // TODO: write levels class
   // TODO write up background objects
   private ArrayList<Level> levels;
-  private int currentLevelNum = 0;
+  private static int currentLevelNum = 0;
   private Level currentLevel;
   private BufferedImage grassTile;
 
@@ -424,7 +424,7 @@ public class MapHandler {
     return 0;
   }
 
-  public int getCurrentLevelNum() {
+  public static int getCurrentLevelNum() {
     return currentLevelNum;
   }
 }

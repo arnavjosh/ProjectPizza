@@ -1,9 +1,10 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public abstract class Mob {
   protected int hp;
   protected String name;
-  protected Image image;
+  protected BufferedImage image;
 
   public abstract void draw(Graphics2D g, int panelWidth, int panelHeight);
 
