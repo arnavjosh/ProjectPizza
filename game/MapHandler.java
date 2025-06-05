@@ -50,8 +50,9 @@ public class MapHandler {
     }
   }
 
-  private void loadLevels() {}
+  private void loadLevels()
   {
+    System.out.println(levels);
     Level level0 = new Level();
     level0.addUp(5);
     level0.addUpRight();

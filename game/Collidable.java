@@ -18,8 +18,8 @@ public abstract class Collidable extends GraphicObject {
     collisionBox = createCollisionBox();
   }
 
-  public Collidable(int x, int y, double width, double height) {
-    super(x, y, (int) width, (int) height,null);
+  public Collidable(int x, int y, int width, int height, String imagePath) {
+    super(x, y, (int) width, (int) height, imagePath);
     collisionBox = createCollisionBox();
   }
 

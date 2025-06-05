@@ -17,7 +17,7 @@ public class RoadMob extends Collidable {
   private int randomIndex = (int) (Math.random() * paths.length);
 
   public RoadMob(int x, int y, Orientation orientation) {
-    super(x, y, 300, 200);
+    super(x, y, 300, 200,  "/images/crazy-ugly-rat.png");
     setPath(paths[randomIndex]);
     this.orientation = orientation;
     collisionBox = createCollisionBox();
