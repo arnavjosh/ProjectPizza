@@ -211,8 +211,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     }
   }
 
-  public void StartTurnBased() {
-    finishLevel();
+  public void startTurnBased() {
     isAnimating = false;
 
     JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
@@ -251,9 +250,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
       System.out.println("X: " + car.getX() + ", Y: " + car.getY());
     }
     if (code == KeyEvent.VK_P) {
-      if (!showPauseMenu) {
+      if (!showPauseMenu) 
+      {
         pauseGame();
-      } else {
+      } else
+      {
         resumeGame();
       }
     }

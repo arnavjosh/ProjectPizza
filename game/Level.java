@@ -160,15 +160,8 @@ public class Level {
     collidables.add(new House(x, y, orientation));
   }
 
-  public void addTurnBased(int x, int y, RoadMob.Orientation orientation) {
-    double rotation;
-    if (orientation == RoadMob.Orientation.EAST || orientation == RoadMob.Orientation.WEST) {
-      rotation = Math.toRadians(90);
-    } else {
-      rotation = 0;
-    }
-    addRoad(new RoadSegment(x, y, 0, RoadSegment.Type.TURNBASEDTEST));
-    collidables.add(new RoadMob(x, y, orientation));
+  public void addTurnBased(int x, int y) {
+    collidables.add(new RoadMob(x, y));
 
   }
 

@@ -97,7 +97,7 @@ public class MapHandler {
     level0.addDominos(415, 500);
     level0.addHouseNorth(675, -238); // This is the starting house
     level0.addCheckpoint(1000, -238, House.Orientation.NORTH); // This is the checkpoint house
-    level0.addTurnBased(500, -2000, RoadMob.Orientation.NORTH);// for testing this is the second time im writing tehsnit
+    level0.addTurnBased(500, -2000);// for testing this is the second time im writing tehsnit
     // subtract 450 from y for each level up
     level0.addHouseNorth(675, -688);
     level0.addHouseNorth(1000, -688);

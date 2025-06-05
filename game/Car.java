@@ -97,7 +97,7 @@ public class Car {
         steeringAngle = 0;
         //checks if it collided into a roadmob
         if( collidable instanceof RoadMob) {
-          panel.StartTurnBased();
+          panel.startTurnBased();
         }
         numCollisions++;
         if (numCollisions >= 100) {
@@ -167,7 +167,7 @@ public class Car {
       nextLevel();
     }
     if (segment != null && segment.roadType == RoadSegment.Type.TURNBASEDTEST) {
-      panel.StartTurnBased();
+      panel.startTurnBased();
     }
   }
 

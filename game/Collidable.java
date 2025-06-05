@@ -26,16 +26,15 @@ public abstract class Collidable extends GraphicObject {
   public abstract Rectangle2D.Double createCollisionBox();
 
   public void draw(Graphics2D g) {
-    if (getImage() != null) {
+    if (getImage() == null)
+        return;
+    if(width == 0 || height == 0) {
       // no imageobserver so we pass in null for that
       g.drawImage(getImage(), x - getImage().getWidth() / 2, y - getImage().getHeight() / 2, getImage().getWidth(),
           getImage().getHeight(), null);
-      // draw the collision box
-      // g.setColor(Color.BLUE);
-      // g.draw(collisionBox);
-    } else {
-      g.setColor(color);
-      drawAlt(g);
+    }
+    else{
+        g.drawImage(getImage(), x - width / 2, y - height / 2, width, height, null);
     }
   }
 
