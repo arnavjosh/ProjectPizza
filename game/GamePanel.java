@@ -97,7 +97,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
   }
 
   public void finishLevel() {
-    game.addPoints(1000 / (int) ((int) (System.currentTimeMillis() - startTime) / 1000.0));
+    game.addPoints(1000 / (int) ((int) (effectiveElapsed) / 1000.0));
     mapHandler.incrementLevel();
     firstInput = false;
     totalPausedTime = 0;
@@ -112,7 +112,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     info = "Level " + mapHandler.getCurrentLevelNum() + " completed!\n";
     info += "Time taken: " + effectiveElapsed / 1000.0 + " seconds\n";
     info += "Collisions: " + car.getCollisions() + "\n";
-    info += "Points earned: " + (1000 / (int) ((int) (System.currentTimeMillis() - startTime) / 1000.0)) + "\n";
+    info += "Points earned: " + (1000 / (int) ((int) (effectiveElapsed) / 1000.0)) + "\n";
     JOptionPane.showMessageDialog(this, info, "Level Completed", JOptionPane.INFORMATION_MESSAGE);
   }
 
@@ -190,10 +190,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     if (!firstInput) {
       effectiveElapsed = 0;
     }
-
-    // prints the dimensions of the screen
-    pizzaGraphic.drawString("Dimensions: " + dimX + "x" + dimY, 20, 50);
-    System.out.println("Dimensions: " + dimX + "x" + dimY);
 
     pizzaGraphic.drawString("Time: " + (effectiveElapsed / 1000.0) + " seconds", 20, 70);
 
