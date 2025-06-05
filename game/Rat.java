@@ -6,10 +6,11 @@ public class Rat extends Mob {
     this.hp = hp;
   }
 
-  public void draw(Graphics g) { // for now only one rat, when theres more more logic is needed to make sure they
-                                 // go where they supposed to be
-    g.setColor(Color.DARK_GRAY);
-    g.fillOval(650, 100, 60, 30);
+  public void draw(Graphics g, int pwidth, int pheight) { // for now only one rat, when theres more more logic is needed
+                                                          // // to make sure they
+    // go where they supposed to be
+    g.setColor(Color.RED);
+    g.fillOval((int) (pwidth * .75), (int) (pheight * .15), 60, 120);
   }
 
   public Ability[] getMobAbilities() {

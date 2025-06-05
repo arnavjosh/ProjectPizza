@@ -5,7 +5,8 @@ import java.awt.event.*;
 public class TurnBasedBattler extends JPanel implements ActionListener { // worry about keylistener if wanted later
   Mob mc;
   Mob enemy;
-
+  int buttonHeight = 120;
+  int bottomMargin = 0; // if we want a gap between bottom of button and bottom of frame
   private JButton[] abilityButtons = new JButton[4];
 
   public TurnBasedBattler(Mob mc, Mob enemy) {
@@ -17,13 +18,13 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
 
     this.mc = mc;
     this.enemy = enemy;
-    // attackButton.setBounds(x, y, width, height);
+
+    int numButtons = abilityButtons.length;
 
     // ability attacks in mc.getheroabilities
     for (int i = 0; i < mc.getMobAbilities().length; i++) {
-      // display the buttons i guess
+      // display the buttons using the component resized for resize
       abilityButtons[i] = new JButton(mc.getMobAbilities()[i].getAbilityName());
-
       abilityButtons[i].addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           // do mob attack for given button prob with parameters forWorking with
@@ -32,8 +33,20 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
           repaint();
         }
       });
-
+      add(abilityButtons[i]);
     }
+    addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+        int buttonWidth = getWidth() / numButtons;
+        int y = getHeight() - buttonHeight - bottomMargin;
+
+        for (int i = 0; i < numButtons; i++) {
+          abilityButtons[i].setBounds(i * buttonWidth, y, buttonWidth, buttonHeight);
+        }
+        repaint();
+      }
+    });
 
     /*
      * not sure, the buttons for sure refresh every time its used obv its way more
@@ -45,10 +58,9 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
   }
 
   public void paintComponent(Graphics g) {
-    // super.paintComponent(abilityPanel); -- it clears the screen
-
-    mc.draw(g);
-    enemy.draw(g);
+    super.paintComponent(g); // it clears the screen
+    mc.draw(g, getWidth(), getHeight());
+    enemy.draw(g, getWidth(), getHeight());
   }
 
   @Override

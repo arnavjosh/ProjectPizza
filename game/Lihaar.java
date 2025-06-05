@@ -6,12 +6,16 @@ public class Lihaar extends Mob {
     this.hp = hp;
   }
 
-  public void draw(Graphics g) {
-    g.setColor(Color.RED);
-    g.fillOval(50, 500, 60, 30);
+  public void draw(Graphics g, int pwidth, int pheight) {
+    g.setColor(Color.BLACK);
+    g.fillOval((int) (pwidth * .15), (int) (pheight * .6), 60, 120);
   }
 
   public Ability[] getMobAbilities() {
-    return new Ability[4];
+    Ability[] abs = new Ability[4];
+    for (int i = 0; i < abs.length; i++) {
+      abs[i] = new Ability("abilitytest " + (i + 1), 20);
+    }
+    return abs;
   }
 }
