@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Car {
   private double x;
   private double y;
-  
+
   private int centerX;
   private int centerY;
 
@@ -49,9 +49,9 @@ public class Car {
 
   private GamePanel panel;
 
-//for testing
+  // for testing
   public String currentSegment;
-  
+
   public Car(int startX, int startY, GamePanel panel) {
     x = startX;
     y = startY;
@@ -62,11 +62,10 @@ public class Car {
     this.panel = panel;
     headingRadians = 0;
 
-    try{
-        carImage = ImageIO.read(getClass().getResource("/images/Car.png"));
-    } catch (IOException e)
-    {
-        e.printStackTrace();
+    try {
+      carImage = ImageIO.read(getClass().getResource("/images/Car.png"));
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
@@ -74,11 +73,9 @@ public class Car {
 
     centerX = GamePanel.dimX / 2;
     centerY = GamePanel.dimY / 2;
-    for(Collidable collidable : mapHandler.getCurrentCollidables())
-    {
-      if(getBounds().intersects(collidable.getCollisionBox()))
-      {
-        //moves car away from the center of the collidable by a given distance
+    for (Collidable collidable : mapHandler.getCurrentCollidables()) {
+      if (getBounds().intersects(collidable.getCollisionBox())) {
+        // moves car away from the center of the collidable by a given distance
         double dx = x - collidable.getCollisionBox().getCenterX();
         double dy = y - collidable.getCollisionBox().getCenterY();
         double distance = Math.sqrt(dx * dx + dy * dy);
@@ -93,56 +90,53 @@ public class Car {
         x += dx * moveDistance;
         y += dy * moveDistance;
 
-        speed = -1*(Math.signum(speed))*(Math.max(Math.abs(speed*0.2), 0.5));
+        speed = -1 * (Math.signum(speed)) * (Math.max(Math.abs(speed * 0.2), 0.5));
         velocityX = 0;
         velocityY = 0;
         steeringAngle = 0;
         numCollisions++;
-        if(numCollisions >= 100)
-        {
-          //if you hit too many times, reset the car
+        if (numCollisions >= 100) {
+          // if you hit too many times, reset the car
           reset();
           numCollisions = 0;
         }
       }
     }
-      
-    
-    if(!panel.paused())
-    {
+
+    if (!panel.paused()) {
 
       if (turningLeft) {
         steeringAngle = Math.max(steeringAngle - steeringSpeed, -maxSteeringAngle);
       } else if (turningRight) {
         steeringAngle = Math.min(steeringAngle + steeringSpeed, maxSteeringAngle);
-      } else{
-        if(steeringAngle>0)
-          steeringAngle = Math.max(0,steeringAngle-steeringSpeed);
-        else if(steeringAngle<0)
-          steeringAngle = Math.min(0,steeringAngle+steeringSpeed);
+      } else {
+        if (steeringAngle > 0)
+          steeringAngle = Math.max(0, steeringAngle - steeringSpeed);
+        else if (steeringAngle < 0)
+          steeringAngle = Math.min(0, steeringAngle + steeringSpeed);
       }
 
       if (accelerating) {
-        speed = Math.min(speed+acceleration, maxSpeed);
+        speed = Math.min(speed + acceleration, maxSpeed);
       } else if (braking) {
-        speed = Math.max(speed-acceleration, -maxSpeed/2.0);
+        speed = Math.max(speed - acceleration, -maxSpeed / 2.0);
       } else {
-        //hit song friction by band imagine dragons
-        speed*=friction;
+        // hit song friction by band imagine dragons
+        speed *= friction;
       }
 
-      if (speed!= 0 && Math.abs(steeringAngle) > 0.001)
-      {
-        //you can use sin to figure out the radius of the turn based on the angle you turn by
+      if (speed != 0 && Math.abs(steeringAngle) > 0.001) {
+        // you can use sin to figure out the radius of the turn based on the angle you
+        // turn by
         double turnRadius = wheelBase / Math.abs(Math.sin(steeringAngle));
-        double angularVelocity = speed/turnRadius;
+        double angularVelocity = speed / turnRadius;
         headingRadians += angularVelocity * Math.signum(steeringAngle);
       }
 
       double desiredVelocityX = speed * Math.sin(headingRadians);
       double desiredVelocityY = -speed * Math.cos(headingRadians);
 
-      //simulate sliding
+      // simulate sliding
       velocityX = velocityX * driftFactor + desiredVelocityX * gripFactor;
       velocityY = velocityY * driftFactor + desiredVelocityY * gripFactor;
 
@@ -152,42 +146,41 @@ public class Car {
 
     }
 
+    // handles slowing down car if not on road (changes speed sigma boy)
 
-    //handles slowing down car if not on road (changes speed sigma boy)
-    
     if (!mapHandler.isRoadAt(x, y)) {
       onRoad = false;
-      speed *= friction*friction;
-    }
-    else {
+      speed *= friction * friction;
+    } else {
       onRoad = true;
     }
     double frontOfCarX = x + carLength / 2 * Math.sin(headingRadians);
     double frontOfCarY = y - carLength / 2 * Math.cos(headingRadians);
     RoadSegment segment = mapHandler.getSegmentAt(frontOfCarX, frontOfCarY);
     if (segment != null && segment.roadType == RoadSegment.Type.CHECKPOINT) {
-        nextLevel();
+      nextLevel();
     }
-
+    if (segment != null && segment.roadType == RoadSegment.Type.TURNBASEDTEST) {
+      panel.StartTurnBased();
+    }
   }
 
-  public void nextLevel()
-  {
+  public void nextLevel() {
     reset();
     panel.finishLevel();
 
   }
 
   public Path2D getBounds() {
-    //applies rotations to points based on headingRadians (insert starstruck emoji)
+    // applies rotations to points based on headingRadians (insert starstruck emoji)
     double topLeftX = (x - carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians));
     double topLeftY = (y - carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians));
-    double topRightX =  (x + carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians));
-    double topRightY =  (y + carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians));
-    double bottomLeftX =  (x - carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
-    double bottomLeftY =  (y - carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
-    double bottomRightX =  (x + carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
-    double bottomRightY =  (y + carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
+    double topRightX = (x + carWidth / 2 * Math.cos(headingRadians) - carLength / 2 * Math.sin(headingRadians));
+    double topRightY = (y + carWidth / 2 * Math.sin(headingRadians) + carLength / 2 * Math.cos(headingRadians));
+    double bottomLeftX = (x - carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
+    double bottomLeftY = (y - carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
+    double bottomRightX = (x + carWidth / 2 * Math.cos(headingRadians) + carLength / 2 * Math.sin(headingRadians));
+    double bottomRightY = (y + carWidth / 2 * Math.sin(headingRadians) - carLength / 2 * Math.cos(headingRadians));
 
     Path2D path = new Path2D.Double();
     path.moveTo(topLeftX, topLeftY);
@@ -198,8 +191,7 @@ public class Car {
     return path;
   }
 
-  public void reset()
-  {
+  public void reset() {
     speed = 0;
     headingRadians = 0;
     x = startX;
@@ -214,30 +206,27 @@ public class Car {
     velocityY = 0;
   }
 
-  //this method draws teh car at each frame and rotates the  
+  // this method draws teh car at each frame and rotates the
   public void draw(Graphics2D g2d) {
     int carWidth = 40;
     int carLength = 80;
     int bumperHeight = 10;
 
-    
-
-    if(carImage!=null)
-    {
-        //no imageobserver so we pass in null for that
-        g2d.drawImage(carImage, centerX - carImage.getWidth() / 2, centerY - carImage.getHeight() / 2, carImage.getWidth(),carImage.getHeight(), null);
-    }
-    else{
+    if (carImage != null) {
+      // no imageobserver so we pass in null for that
+      g2d.drawImage(carImage, centerX - carImage.getWidth() / 2, centerY - carImage.getHeight() / 2,
+          carImage.getWidth(), carImage.getHeight(), null);
+    } else {
       g2d.setColor(Color.RED);
-      g2d.drawImage(carImage, centerX - carWidth / 2, centerY - carLength / 2, carImage.getWidth(),carImage.getHeight(), null);
-
+      g2d.drawImage(carImage, centerX - carWidth / 2, centerY - carLength / 2, carImage.getWidth(),
+          carImage.getHeight(), null);
 
       g2d.setColor(Color.BLACK);
       g2d.fillRect(centerX, centerY, carWidth, bumperHeight);
     }
-  } 
+  }
 
-  //setters and getters :D
+  // setters and getters :D
 
   public void setAccelerating(boolean accelerating) {
     this.accelerating = accelerating;
@@ -251,19 +240,17 @@ public class Car {
     this.turningRight = turningRight;
   }
 
-  public void setBraking(boolean braking)
-  {
+  public void setBraking(boolean braking) {
     this.braking = braking;
   }
-  
+
   public void setCollisions(int numCollisions) {
     this.numCollisions = numCollisions;
   }
 
-    public double getSpeed()
-    {
-        return speed;
-    }
+  public double getSpeed() {
+    return speed;
+  }
 
   public double getX() {
     return x;
@@ -284,4 +271,4 @@ public class Car {
   public int getCollisions() {
     return numCollisions;
   }
-} 
+}
