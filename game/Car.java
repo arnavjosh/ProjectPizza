@@ -75,6 +75,7 @@ public class Car {
     centerY = GamePanel.dimY / 2;
     for (Collidable collidable : mapHandler.getCurrentCollidables()) {
       if (getBounds().intersects(collidable.getCollisionBox())) {
+
         // moves car away from the center of the collidable by a given distance
         double dx = x - collidable.getCollisionBox().getCenterX();
         double dy = y - collidable.getCollisionBox().getCenterY();
@@ -94,12 +95,17 @@ public class Car {
         velocityX = 0;
         velocityY = 0;
         steeringAngle = 0;
+        //checks if it collided into a roadmob
+        if( collidable instanceof RoadMob) {
+          panel.StartTurnBased();
+        }
         numCollisions++;
         if (numCollisions >= 100) {
           // if you hit too many times, reset the car
           reset();
           numCollisions = 0;
         }
+
       }
     }
 
