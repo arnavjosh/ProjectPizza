@@ -3,12 +3,14 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 
 public class Lihaar extends Mob {
+  private int maxHp;
   private String[] paths = {
       "/images/deliverymanturnbased.png",
   };
 
   public Lihaar(int hp) {
     name = "Lihaar";
+    maxHp = hp;
     this.hp = hp;
 
     try {
@@ -28,6 +30,17 @@ public class Lihaar extends Mob {
     int drawY = (panelHeight - drawHeight) / 2;
 
     g.drawImage(image, (int) (panelWidth * .15), (int) (panelHeight * .65), panelWidth / 6, panelHeight / 6, null);
+
+    double healthBarLength = (int) (panelWidth / 6);
+    double healthBarHeight = (int) (panelHeight * .075);
+
+    g.setColor(Color.GREEN);
+    g.fillRect((int) (panelWidth * .15), (int) (panelHeight * .57), (int) (healthBarLength * hp / maxHp),
+        (int) healthBarHeight);
+
+    g.setColor(Color.BLACK);
+    g.drawRect((int) (panelWidth * .15), (int) (panelHeight * .57), (int) (healthBarLength * hp / maxHp),
+        (int) healthBarHeight);
   }
 
   public Ability[] getMobAbilities() {
@@ -41,5 +54,9 @@ public class Lihaar extends Mob {
     abs[2] = new Ability("Cheese Eye Squirt", 40);
     abs[3] = new Ability("something idk", 35, 10);
     return abs;
+  }
+
+  public void damage(int dmg) {
+    hp -= dmg;
   }
 }

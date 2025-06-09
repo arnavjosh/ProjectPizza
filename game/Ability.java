@@ -17,4 +17,8 @@ public class Ability {
   public String getAbilityName() {
     return name;
   }
+
+  public int getDamage() {
+    return damage;
+  }
 }

@@ -12,6 +12,8 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
   int bottomMargin = 0; // if we want a gap between bottom of button and bottom of frame
   private JButton[] abilityButtons = new JButton[4];
   private BufferedImage tile;
+  Ability currentMcAbility;
+  Ability currentEnemyAbility;
 
   private void loadTile() {
     String tilePath;
@@ -48,13 +50,18 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
 
     // ability attacks in mc.getheroabilities
     for (int i = 0; i < mc.getMobAbilities().length; i++) {
-      // display the buttons using the component resized for resize
+      currentMcAbility = mc.getMobAbilities()[i];
+      currentEnemyAbility = getRandomEnemyAbility(enemy.getMobAbilities());
       abilityButtons[i] = new JButton(mc.getMobAbilities()[i].getAbilityName());
       abilityButtons[i].addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          // do mob attack for given button prob with parameters forWorking with
-          // Typing-related Events mob, ability, and
-          // enemy if damage
+          // e.getSource()
+
+          enemy.damage(currentMcAbility.getDamage());
+          // wait a few seconds
+
+          // mc.damage(currentEnemyAbility.getDamage());
+
           repaint();
         }
       });
@@ -80,6 +87,22 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
      * timer.start();
      */
 
+  }
+
+  private Ability getRandomEnemyAbility(Ability[] abilities) {
+    int rand = (int) (Math.random() * 4) + 1;
+    switch (rand) {
+      case 1:
+        return abilities[0];
+      case 2:
+        return abilities[1];
+      case 3:
+        return abilities[2];
+      case 4:
+        return abilities[3];
+      default:
+        return abilities[-1];
+    }
   }
 
   public void paintComponent(Graphics g) {
