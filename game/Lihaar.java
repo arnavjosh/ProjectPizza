@@ -20,6 +20,10 @@ public class Lihaar extends Mob {
     }
   }
 
+  public int getHealth() {
+    return hp;
+  }
+
   public void draw(Graphics2D g, int panelWidth, int panelHeight) {
     if (image == null)
       return;

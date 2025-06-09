@@ -35,7 +35,7 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
     }
   }
 
-  public TurnBasedBattler(Mob mc, Mob enemy) {
+  public TurnBasedBattler(Mob mc, Mob enemy, GamePanel parentPanel) {
     setLayout(null); // disables auto layout so you giet more control?
     // addKeyListener(this);
 
@@ -53,16 +53,25 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
       currentMcAbility = mc.getMobAbilities()[i];
       currentEnemyAbility = getRandomEnemyAbility(enemy.getMobAbilities());
       abilityButtons[i] = new JButton(mc.getMobAbilities()[i].getAbilityName());
+
       abilityButtons[i].addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           // e.getSource()
-
           enemy.damage(currentMcAbility.getDamage());
-          // wait a few seconds
-
-          // mc.damage(currentEnemyAbility.getDamage());
+          // wait a few seconds and display something marking the enemy's attack
+          mc.damage(currentEnemyAbility.getDamage());
 
           repaint();
+
+          if (mc.getHealth() <= 0) {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(TurnBasedBattler.this);
+            JOptionPane.showMessageDialog(null, "YOU DIED");
+            frame.setContentPane(parentPanel);
+            frame.revalidate();
+            frame.repaint();
+            parentPanel.setFocusable(true);
+            parentPanel.resumeGame();
+          }
         }
       });
       add(abilityButtons[i]);
@@ -129,6 +138,6 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
 
   public static void main(String[] args) {
     // just for testing
-    new TurnBasedBattler(new Lihaar(100), new Rat(50));
+    // new TurnBasedBattler(new Lihaar(100), new Rat(50));
   }
 }

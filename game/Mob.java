@@ -10,5 +10,7 @@ public abstract class Mob {
 
   public abstract Ability[] getMobAbilities();
 
+  public abstract int getHealth();
+
   public abstract void damage(int dmg);
 }
