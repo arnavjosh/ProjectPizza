@@ -42,16 +42,21 @@ public class MapHandler {
   }
 
   public void setLevel(int levelNum) {
-    if (levelNum >= 0 && levelNum < levels.size()) {
-      currentLevelNum = levelNum;
-      currentLevel = levels.get(currentLevelNum);
-      loadGrassTile();
-    } else {
-      System.out.println("Invalid level number: " + levelNum);
+    currentLevelNum = levelNum;
+    loadGrassTile();
+
+    switch (levelNum) {
+      case 0:
+        currentLevel = buildLevel0(); // always returns new Level
+      case 1:
+        currentLevel = buildLevel1();
+      default:
+        System.out.println("Invalid level number: " + levelNum);
+        return;
     }
   }
 
-  private void loadLevels() {
+  private Level buildLevel0() {
     System.out.println(levels);
     Level level0 = new Level();
     level0.addUp(5);
@@ -209,6 +214,10 @@ public class MapHandler {
     level0.addBackgroundObject(new GraphicObject(100, 100, "/images/Crater.png"));
     levels.add(level0);
 
+    return level0;
+  }
+
+  private Level buildLevel1() {
     Level level1 = new Level();
     level1.addDominos(415, 500);
     // grid of roads, no comments on lines
@@ -338,6 +347,12 @@ public class MapHandler {
     level1.addPlant(95, 440);
 
     levels.add(level1);
+    return level1;
+  }
+
+  private void loadLevels() {
+    buildLevel0();
+    buildLevel1();
   }
 
   public void draw(Graphics2D gameGraphics) {

@@ -237,7 +237,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
   public void startTurnBased() {
     this.setLayout(null);
-    TurnBasedBattler battlerPanel = new TurnBasedBattler(new Lihaar(100), new Rat(50), this);
+    TurnBasedBattler battlerPanel = new TurnBasedBattler(new Lihaar(100), new Rat(100), this);
     battlerPanel.setBounds(0, 0, this.getWidth(), this.getHeight());
     this.add(battlerPanel);
     battlerPanel.requestFocusInWindow();
@@ -246,14 +246,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     this.revalidate();
     this.repaint();
 
-    /*
-     * for (Component c : this.getComponents()) {
-     * if (c instanceof TurnBasedBattler) {
-     * existsTurnBased = true;
-     * }
-     * }
-     */
-
+    this.addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+        battlerPanel.setBounds(0, 0, getWidth(), getHeight());
+        battlerPanel.revalidate();
+        battlerPanel.repaint();
+      }
+    });
   }
 
   public void actionPerformed(ActionEvent e) {
