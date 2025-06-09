@@ -43,11 +43,11 @@ public class MapHandler {
 
   public void setLevel(int levelNum) {
     if (levelNum >= 0 && levelNum < levels.size()) {
-        currentLevelNum = levelNum;
-        currentLevel = levels.get(currentLevelNum);
-        loadGrassTile();
+      currentLevelNum = levelNum;
+      currentLevel = levels.get(currentLevelNum);
+      loadGrassTile();
     } else {
-        System.out.println("Invalid level number: " + levelNum);
+      System.out.println("Invalid level number: " + levelNum);
     }
   }
 

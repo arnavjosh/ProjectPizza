@@ -95,11 +95,14 @@ public class Car {
         velocityX = 0;
         velocityY = 0;
         steeringAngle = 0;
-        //checks if it collided into a roadmob
-        if( collidable instanceof RoadMob) {
+        // checks if it collided into a roadmob
+        if (collidable instanceof RoadMob) {
+          mapHandler.getCurrentCollidables().remove(collidable);
           panel.startTurnBased();
         }
-        numCollisions++;
+        if (!(collidable instanceof RoadMob)) {
+          numCollisions++;
+        }
         if (numCollisions >= 10) {
           // if you hit too many times, reset the car
           reset();

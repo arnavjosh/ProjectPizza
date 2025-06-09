@@ -39,6 +39,7 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
     setLayout(null); // disables auto layout so you giet more control?
     // addKeyListener(this);
 
+    // parentPanel.pauseGame();
     setPreferredSize(new Dimension(800, 600));
 
     this.mc = mc;
@@ -64,13 +65,30 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
           repaint();
 
           if (mc.getHealth() <= 0) {
-            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(TurnBasedBattler.this);
             JOptionPane.showMessageDialog(null, "YOU DIED");
-            frame.setContentPane(parentPanel);
-            frame.revalidate();
-            frame.repaint();
-            parentPanel.setFocusable(true);
-            parentPanel.resumeGame();
+            parentPanel.remove(TurnBasedBattler.this);
+            parentPanel.revalidate();
+            parentPanel.repaint();
+            SwingUtilities.invokeLater(() -> { // apparantly should make it only activate after revalidating and
+                                               // repainting
+              parentPanel.setFocusable(true);
+              parentPanel.requestFocusInWindow();
+              parentPanel.gameOver();
+
+            });
+          }
+          if (enemy.getHealth() <= 0) {
+            JOptionPane.showMessageDialog(null, "YOU WON THE BATTLE");
+            parentPanel.remove(TurnBasedBattler.this);
+            parentPanel.revalidate();
+            parentPanel.repaint();
+            SwingUtilities.invokeLater(() -> { // apparantly should make it only activate after revalidating and
+                                               // repainting
+              parentPanel.setFocusable(true);
+              parentPanel.requestFocusInWindow();
+              parentPanel.resumeGameTurnBased();
+            });
+
           }
         }
       });
@@ -99,19 +117,8 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
   }
 
   private Ability getRandomEnemyAbility(Ability[] abilities) {
-    int rand = (int) (Math.random() * 4) + 1;
-    switch (rand) {
-      case 1:
-        return abilities[0];
-      case 2:
-        return abilities[1];
-      case 3:
-        return abilities[2];
-      case 4:
-        return abilities[3];
-      default:
-        return abilities[-1];
-    }
+    int rand = (int) (Math.random() * 4);
+    return abilities[rand];
   }
 
   public void paintComponent(Graphics g) {

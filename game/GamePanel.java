@@ -41,6 +41,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     // stack overflow said setfocusable will make key inputs focus better? I think
     // this will solve problems we have
     setFocusable(true);
+    requestFocusInWindow();
     addKeyListener(this);
     mapHandler = new MapHandler();
 
@@ -205,7 +206,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     pizzaGraphic.setFont(new Font("Serif", Font.BOLD, 25));
     pizzaGraphic.drawString("Speed: " + ((int) (car.getSpeed() * 100) / 100.0), 20, 30);
 
-    int currentTime = (int) System.currentTimeMillis();
+    long currentTime = /* (long) ((int) */ System.currentTimeMillis();
     // sigma boy ternary
     effectiveElapsed = isPaused ? pauseStartTime - startTime - totalPausedTime
         : currentTime - startTime - totalPausedTime;
@@ -235,16 +236,24 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
   }
 
   public void startTurnBased() {
-    isAnimating = false;
-
-    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-
+    this.setLayout(null);
     TurnBasedBattler battlerPanel = new TurnBasedBattler(new Lihaar(100), new Rat(50), this);
-    setFocusable(true);
+    battlerPanel.setBounds(0, 0, this.getWidth(), this.getHeight());
+    this.add(battlerPanel);
+    battlerPanel.requestFocusInWindow();
+    battlerPanel.setVisible(true);
+    this.setComponentZOrder(battlerPanel, 0);
+    this.revalidate();
+    this.repaint();
 
-    frame.setContentPane(battlerPanel);
-    frame.revalidate();
-    frame.repaint();
+    /*
+     * for (Component c : this.getComponents()) {
+     * if (c instanceof TurnBasedBattler) {
+     * existsTurnBased = true;
+     * }
+     * }
+     */
+
   }
 
   public void actionPerformed(ActionEvent e) {
@@ -256,7 +265,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
   public void keyPressed(KeyEvent e) {
     if (!firstInput) {
       firstInput = true;
-      startTime = (int) System.currentTimeMillis();
+      startTime = /* (long) ((int) */ System.currentTimeMillis();
     }
     int code = e.getKeyCode();
     if (code == KeyEvent.VK_UP || code == KeyEvent.VK_W)
@@ -307,6 +316,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     isPaused = false;
     totalPausedTime += System.currentTimeMillis() - pauseStartTime;
     pauseStartTime = 0;
+    // timer.start();
   }
 
   public void pauseGame() {
@@ -327,7 +337,19 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     setPauseButtonsVisible(false);
 
     // request focus back to the game panel (this mehtod is so cool)
+    this.setFocusable(true);
     this.requestFocusInWindow();
+
+    repaint();
+  }
+
+  public void resumeGameTurnBased() { // other custom timer methods don't work on things relating to turn based
+    this.setFocusable(true);
+    this.requestFocusInWindow();
+
+    timer.stop();
+    timer.start();
+
     repaint();
   }
 
@@ -339,7 +361,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
     car.reset();
     car.setCollisions(0);
-    startTime = (int) System.currentTimeMillis();
+    startTime = /* (long) ((int) */ System.currentTimeMillis();
     totalPausedTime = 0;
     pauseStartTime = 0;
     effectiveElapsed = 0;
