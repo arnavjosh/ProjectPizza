@@ -347,6 +347,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     this.setFocusable(true);
     this.requestFocusInWindow();
 
+    car.setTurningLeft(false);
+    car.setTurningRight(false);
+    car.setAccelerating(false);
+    car.setBraking(false);
+
     timer.stop();
     timer.start();
 

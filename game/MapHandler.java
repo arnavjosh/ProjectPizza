@@ -44,16 +44,10 @@ public class MapHandler {
   public void setLevel(int levelNum) {
     currentLevelNum = levelNum;
     loadGrassTile();
+    levels.clear();
+    loadLevels();
 
-    switch (levelNum) {
-      case 0:
-        currentLevel = buildLevel0(); // always returns new Level
-      case 1:
-        currentLevel = buildLevel1();
-      default:
-        System.out.println("Invalid level number: " + levelNum);
-        return;
-    }
+    currentLevel = levels.get(currentLevelNum);
   }
 
   private Level buildLevel0() {
