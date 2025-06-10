@@ -409,7 +409,12 @@ public class MapHandler {
   }
 
   public void incrementLevel() {
-    // loops level using mod
+    // loops level using mode
+    int numLevelsUntilLoop = 2;
+    if (currentLevelNum == numLevelsUntilLoop) {
+      levels.clear();
+    }
+
     currentLevelNum = (currentLevelNum + 1) % levels.size();
     currentLevel = levels.get(currentLevelNum);
     loadGrassTile();
