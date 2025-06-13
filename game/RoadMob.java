@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class RoadMob extends Collidable {
-  private int width = 300, height = 200;
+  private int width = 150, height = 100;
 
   private String[] paths = {
       "/images/crazy-ugly-rat.png",
@@ -12,7 +12,7 @@ public class RoadMob extends Collidable {
   private int randomIndex = (int) (Math.random() * paths.length);
 
   public RoadMob(int x, int y) {
-    super(x, y, 300, 200,  "/images/crazy-ugly-rat.png");
+    super(x, y, 150, 100,  "/images/crazy-ugly-rat.png");
     setPath(paths[randomIndex]);
     collisionBox = createCollisionBox();
   }

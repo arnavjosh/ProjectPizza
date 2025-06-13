@@ -99,6 +99,10 @@ public class Car {
         // checks if it collided into a roadmob
         if (collidable instanceof RoadMob) {
           collidablesToRemove.add(collidable);
+          speed = 0;
+          velocityX = 0;
+          velocityY = 0;
+          steeringAngle = 0;
           panel.startTurnBased();
         }
         if (!(collidable instanceof RoadMob)) {
@@ -107,6 +111,7 @@ public class Car {
         if (numCollisions >= 10) {
           // if you hit too many times, reset the car
           reset();
+          System.out.println("Game Over! Too many collisions.");
           panel.gameOver();
         }
 
@@ -183,6 +188,17 @@ public class Car {
     reset();
     panel.finishLevel();
 
+  }
+
+  public void stop()
+  {
+    accelerating = false;
+    turningLeft = false;
+    turningRight = false;
+    braking = false;
+    speed = 0;
+    velocityX = 0;
+    velocityY = 0;
   }
 
   public Path2D getBounds() {

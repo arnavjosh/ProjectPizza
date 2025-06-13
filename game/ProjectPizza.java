@@ -47,6 +47,7 @@ public class ProjectPizza extends JPanel implements JavaArcade {
 
   public void stopGame() {
     isRunning = false;
+    System.out.println("Game stopped.");
     display.gameOver(points);
     gamePanel.resetGame();
     points = 0;

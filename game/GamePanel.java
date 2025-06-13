@@ -401,6 +401,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     return game.getInstructions();
   }
 
+  public Car getCar() {
+    return car;
+  }
+
   public String getCredits() {
     return game.getCredits();
   }

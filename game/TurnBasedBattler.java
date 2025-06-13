@@ -57,6 +57,7 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
 
       abilityButtons[i].addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
+          parentPanel.getCar().stop();
           // e.getSource()
           enemy.damage(currentMcAbility.getDamage());
           // wait a few seconds and display something marking the enemy's attack
@@ -72,6 +73,7 @@ public class TurnBasedBattler extends JPanel implements ActionListener { // worr
             SwingUtilities.invokeLater(() -> { // apparantly should make it only activate after revalidating and
                                                // repainting
               parentPanel.setFocusable(true);
+              System.out.println("Game Over");
               parentPanel.requestFocusInWindow();
               parentPanel.gameOver();
 
