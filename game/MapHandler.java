@@ -51,7 +51,6 @@ public class MapHandler {
   }
 
   private Level buildLevel0() {
-    System.out.println(levels);
     Level level0 = new Level();
     level0.addUp(5);
     level0.addUpRight();

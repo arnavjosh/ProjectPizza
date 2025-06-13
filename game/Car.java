@@ -73,6 +73,7 @@ public class Car {
 
     centerX = GamePanel.dimX / 2;
     centerY = GamePanel.dimY / 2;
+    ArrayList<Collidable> collidablesToRemove = new ArrayList<>();
     for (Collidable collidable : mapHandler.getCurrentCollidables()) {
       if (getBounds().intersects(collidable.getCollisionBox())) {
 
@@ -97,7 +98,7 @@ public class Car {
         steeringAngle = 0;
         // checks if it collided into a roadmob
         if (collidable instanceof RoadMob) {
-          mapHandler.getCurrentCollidables().remove(collidable);
+          collidablesToRemove.add(collidable);
           panel.startTurnBased();
         }
         if (!(collidable instanceof RoadMob)) {
@@ -110,6 +111,10 @@ public class Car {
         }
 
       }
+    }
+
+    for(Collidable collidable : collidablesToRemove) {
+      mapHandler.getCurrentCollidables().remove(collidable);
     }
 
     if (!panel.paused()) {
@@ -210,7 +215,6 @@ public class Car {
     turningRight = false;
     braking = false;
     onRoad = true;
-    numCollisions = 0;
     velocityX = 0;
     velocityY = 0;
   }

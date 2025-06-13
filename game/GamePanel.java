@@ -99,7 +99,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
   }
 
   public void finishLevel() {
-    gainedPoints = (int) effectiveElapsed;
+    gainedPoints = (int) (1000 - (effectiveElapsed / 1000.0 * 10) - car.getCollisions() * 50);
     game.addPoints(gainedPoints);
     mapHandler.incrementLevel();
 
@@ -119,6 +119,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     info += "Collisions: " + car.getCollisions() + "\n";
     info += "Points earned: " + gainedPoints + "\n";
     JOptionPane.showMessageDialog(this, info, "Level Completed", JOptionPane.INFORMATION_MESSAGE);
+    car.setCollisions(0);
   }
 
   private void animate(Graphics pizzaGraphic) {
