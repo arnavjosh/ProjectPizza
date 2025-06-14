@@ -27,34 +27,31 @@ public class House extends Collidable {
         }
     }
 
-    @Override
     public void drawAlt(Graphics2D g) {
         g.fillRect(x - width / 2, y - height / 2, width, height);
     }
 
-    @Override
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g) 
+    {
         g= (Graphics2D) g.create();
-        g.setColor(Color.BLUE);
-        g.draw(collisionBox);
         if(orientation == Orientation.NORTH)
         {
             g.drawImage(getImage(), x - getImage().getWidth() / 2, y - getImage().getHeight() / 2, getImage().getWidth(), getImage().getHeight(), null);
         }
         else if(orientation == Orientation.SOUTH)
         {
-            g.rotate(Math.PI, x, y); // Rotate for south orientation
+            g.rotate(Math.PI, x, y);
             g.drawImage(getImage(), x - getImage().getWidth() / 2, y - getImage().getHeight() / 2, getImage().getWidth(), getImage().getHeight(), null);
             
         }
         else if(orientation == Orientation.EAST)
         {
-            g.rotate(Math.PI / 2, x, y); // Rotate for east orientation
+            g.rotate(Math.PI / 2, x, y);
             g.drawImage(getImage(), x - getImage().getWidth() / 2, y - getImage().getHeight() / 2, getImage().getWidth(), getImage().getHeight(), null);
         }
         else if(orientation == Orientation.WEST)
         {
-            g.rotate(-Math.PI / 2, x, y); // Rotate for west orientation
+            g.rotate(-Math.PI/2, x, y); 
             g.drawImage(getImage(), x - getImage().getWidth() / 2, y - getImage().getHeight() / 2, getImage().getWidth(), getImage().getHeight(), null);
         }
     }
